@@ -19,103 +19,114 @@ bool Pawn::Move(Position newPosition, Board mainBoard)
 	{
 		return false;
 	}
-	Position left = Position(position.x - 1, position.y);
-	Position right = Position(position.x + 1, position.y);
-	ChessMan* chessLeft = mainBoard.getChess(left);
-	ChessMan* chessRight = mainBoard.getChess(right);
-	if (chessLeft != nullptr)
+	if (this->color == black)
 	{
-		if (chessLeft->color == ~this->color)
+		if (this->step == 0)
 		{
-			mainBoard.EatChess(left);
-			if (this->color = black)
-			{
-				if (newPosition == Position(position.x - 1, position.y - 1))
-				{
-					return true;
-				}
-			}
-			else
-			{
-				if (newPosition == Position(position.x - 1, position.y + 1))
-				{
-					return true;
-				}
-			}
-		}
-	}
-	else if (chessRight != nullptr)
-	{
-		if (chessRight->color == ~this->color)
-		{
-			mainBoard.EatChess(right);
-			if (this->color = black)
-			{
-				if (newPosition == Position(position.x + 1, position.y - 1))
-				{
-					return true;
-				}
-			}
-			else
-			{
-				if (newPosition == Position(position.x + 1, position.y + 1))
-				{
-					return true;
-				}
-			}
-		}
-	}
-	else if (this->step == 0)
-	{
-		if (this->color == black)
-		{
-			if (newPosition == Position(position.x, position.y - 1 || position.y - 2))
+			if (newPosition == Position(position.x, position.y + 1) || newPosition == Position(position.x, position.y + 2))
 			{
 				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 		else
 		{
-			if (newPosition == Position(position.x, position.y + 1 || position.y + 2))
+			ChessMan* UpperLeftChess = mainBoard.getChess(Position(position.x - 1, position.y + 1));
+			ChessMan* UpperRightChess = mainBoard.getChess(Position(position.x + 1, position.y + 1));
+			if (newPosition == Position(position.x - 1, position.y + 1))
 			{
+				if (UpperLeftChess != nullptr && UpperLeftChess->color != this->color)
+				{
+					mainBoard.EatChess(Position(position.x - 1, position.y + 1));
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if (newPosition == Position(position.x + 1, position.y + 1))
+			{
+				if (UpperRightChess != nullptr && UpperRightChess->color != this->color)
+				{
+					mainBoard.EatChess(Position(position.x + 1, position.y + 1));
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if (newPosition == Position(position.x, position.y + 1))
+			{
+				if (position.y + 1 == 7)
+				{
+					mainBoard.Promotion(Position(position.x, position.y + 1));
+				}
 				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 	}
-	else if (this->step != 0)
+	else
 	{
-		if (this->color == black)
+		if (this->step == 0)
 		{
-			if (newPosition == Position(position.x, position.y - 1))
+			if (newPosition == Position(position.x, position.y - 1) || newPosition == Position(position.x, position.y - 2))
 			{
-				ChessMan* chess = mainBoard.getChess(newPosition);
-				if (chess != nullptr)
-				{
-					mainBoard.EatChess(newPosition);
-				}
-				if (newPosition.y == 0)
-				{
-					mainBoard.Promotion(newPosition);
-				}
 				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 		else
 		{
-			if (newPosition == Position(position.x, position.y + 1))
+			ChessMan* LowerLeftChess = mainBoard.getChess(Position(position.x - 1, position.y - 1));
+			ChessMan* LowerRightChess = mainBoard.getChess(Position(position.x + 1, position.y - 1));
+			if (newPosition == Position(position.x - 1, position.y - 1))
 			{
-				ChessMan* chess = mainBoard.getChess(newPosition);
-				if (chess != nullptr)
+				if (LowerLeftChess != nullptr && LowerLeftChess->color != this->color)
 				{
-					mainBoard.EatChess(newPosition);
+					mainBoard.EatChess(Position(position.x - 1, position.y - 1));
+					return true;
 				}
-				if (newPosition.y == 7)
+				else
 				{
-					mainBoard.Promotion(newPosition);
+					return false;
+				}
+			}
+			else if (newPosition == Position(position.x + 1, position.y - 1))
+			{
+				if (LowerRightChess != nullptr && LowerRightChess->color != this->color)
+				{
+					mainBoard.EatChess(Position(position.x + 1, position.y - 1));
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if (newPosition == Position(position.x, position.y - 1))
+			{
+				if (position.y - 1 == 0)
+				{
+					mainBoard.Promotion(Position(position.x, position.y - 1));
 				}
 				return true;
 			}
+			else
+			{
+				return false;
+			}
 		}
 	}
-	return false;
 }

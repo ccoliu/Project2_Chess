@@ -11,9 +11,11 @@ class Board {
 private:
 	ChessMan* board[8][8];
 	friend class ChessMan;
+	int starting_color;
 public:
 	Board()
 	{
+		starting_color = black;
 		for (int i = 0; i < 8; i++)
 		{
 			board[1][i] = new Pawn(white, Position(1, i));
@@ -31,13 +33,28 @@ public:
 	void MoveChess(Position from, Position to)
 	{
 		ChessMan* chess = board[from.x][from.y];
-		board[from.x][from.y] = nullptr;
+		if (chess == nullptr || chess->color != starting_color)
+		{
+			cout << "Invalid move!" << endl;
+			return;
+		}
 		if (chess->Move(to, *this) == true)
 		{
-			chess->position = to;
-			chess->step++;
+			if (board[to.x][to.y] == nullptr)
+			{
+				board[from.x][from.y] = nullptr;
+				chess->position = to;
+				chess->step++;
+				board[to.x][to.y] = chess;
+			}
+			starting_color = ~starting_color;
+			return;
 		}
-		board[to.x][to.y] = chess;
+		else
+		{
+			cout << "Invalid move!" << endl;
+			return;
+		}
 	}
 	void EatChess(Position pos)
 	{
