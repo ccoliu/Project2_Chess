@@ -13,9 +13,9 @@ class ChessMan
 protected:
 	friend class Board;
 	Position position;
-	int step = 0;
 public:
 	int color;
+	int step = 0;
 	ChessMan(int C, Position position);
 	virtual bool Move(Position newPosition, Board mainBoard);
 };
