@@ -21,9 +21,9 @@ bool Knight::Move(Position newPosition, Board mainBoard)
 		return false;
 	}
 	vector<Position> accessable = {{position.x - 2, position.y - 1}, {position.x - 2, position.y + 1},
-								   {position.x - 1, position.y - 2}, {position.x - 1, position.y + 2},
-								   {position.x + 1, position.y - 2}, {position.x + 1, position.y + 2}, 
-								   {position.x + 2, position.y - 1}, {position.x + 2, position.y + 1}};
+				       {position.x - 1, position.y - 2}, {position.x - 1, position.y + 2},
+				       {position.x + 1, position.y - 2}, {position.x + 1, position.y + 2}, 
+				       {position.x + 2, position.y - 1}, {position.x + 2, position.y + 1}};
 	if (find(accessable.begin(), accessable.end(), newPosition) != accessable.end())
 	{
 		if (mainBoard.getChess(newPosition) == nullptr)
