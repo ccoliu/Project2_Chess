@@ -14,4 +14,29 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Position.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessMan.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Pawn.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Pawn.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
