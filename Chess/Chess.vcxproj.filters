@@ -30,14 +30,11 @@
     <ClInclude Include="Knight.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="Rook.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Pawn.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
-    <ClCompile Include="Knight.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>

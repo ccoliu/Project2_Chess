@@ -132,6 +132,7 @@
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Position.h" />
+    <ClInclude Include="Rook.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
