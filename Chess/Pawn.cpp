@@ -7,6 +7,7 @@ Pawn::Pawn(int C, Position position) : ChessMan(C, position)
 {
 	this->color = C;
 	this->position = position;
+	this->icon = (this->color == white ? 'p' : 'P');
 }
 
 bool Pawn::Move(Position newPosition, Board mainBoard)

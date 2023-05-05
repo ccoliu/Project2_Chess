@@ -4,7 +4,7 @@
 
 class Pawn : public ChessMan
 {
-	public:
+public:
 	Pawn(int C, Position position);
 	bool Move(Position newPosition, Board mainBoard);
 };

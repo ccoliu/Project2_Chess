@@ -8,6 +8,7 @@ Knight::Knight(int C, Position position) : ChessMan(C, position)
 {
 	this->color = C;
 	this->position = position;
+	this->icon = ((this->color == white) ? 'k' : 'K');
 }
 
 bool Knight::Move(Position newPosition, Board mainBoard)

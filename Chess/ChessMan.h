@@ -13,6 +13,7 @@ class ChessMan
 protected:
 	friend class Board;
 	Position position;
+	char icon;
 public:
 	int color;
 	int step = 0;

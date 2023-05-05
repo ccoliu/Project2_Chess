@@ -15,7 +15,20 @@ private:
 public:
 	Board()
 	{
-		starting_color = black;
+		for (int i = 0; i < 7; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				board[i][j] = nullptr;
+			}
+		}
+	}
+	~Board()
+	{
+		delete[] board;
+	}
+	void setBoard()
+	{
 		for (int i = 0; i < 8; i++)
 		{
 			board[1][i] = new Pawn(black, Position(i, 1));
@@ -25,10 +38,31 @@ public:
 		board[0][6] = new Knight(black, Position(6, 0));
 		board[7][1] = new Knight(white, Position(1, 7));
 		board[7][6] = new Knight(white, Position(6, 7));
+		return;
 	}
-	~Board()
+	void DrawBoard()
 	{
-		delete[] board;
+		for (int i = 0; i < 7; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				ChessMan* chess = getChess(Position(j, i));
+				if (chess != nullptr)
+				{
+					cout << chess->icon;
+				}
+				else cout << " ";
+			}
+			cout << endl;
+		}
+	}
+	void initMove()
+	{
+		cout << "It's " << (starting_color == white ? " white's " : " black's ") << "turn!" << endl;
+		int x1, y1, x2, y2;
+		cin >> x1 >> y1 >> x2 >> y2;
+		Position from(x1, y1), to(x2, y2);
+		MoveChess(from, to);
 	}
 	ChessMan* getChess(Position position)
 	{
@@ -87,19 +121,19 @@ public:
 				ChessMan* chess = getChess(pos);
 				int color = chess->color;
 				delete chess;
-				board[pos.x][pos.y] = new Queen(color, pos);
+				//board[pos.x][pos.y] = new Queen(color, pos);
 				break;
 			case 2:
 				ChessMan* chess = getChess(pos);
 				int color = chess->color;
 				delete chess;
-				board[pos.x][pos.y] = new Rook(color, pos);
+				//board[pos.x][pos.y] = new Rook(color, pos);
 				break;
 			case 3:
 				ChessMan* chess = getChess(pos);
 				int color = chess->color;
 				delete chess;
-				board[pos.x][pos.y] = new Bishop(color, pos);
+				//board[pos.x][pos.y] = new Bishop(color, pos);
 				break;
 			case 4:
 				ChessMan* chess = getChess(pos);
