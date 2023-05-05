@@ -18,7 +18,7 @@ public:
 		{
 			for (int j = 0; j < 8; j++)
 			{
-				ChessMan* chess = getChess(Position(j, i));
+				ChessMan* chess = getChess(Position(i, j));
 				if (chess != nullptr)
 				{
 					cout << chess->getIcon();
@@ -32,14 +32,14 @@ public:
 	{
 		cout << "It's " << (starting_color == ChessMan::Color::white ? " white's " : " black's ") << "turn!" << endl;
 		int x1, y1, x2, y2;
-		cin >> x1 >> y1 >> x2 >> y2;
+		cin >> y1 >> x1 >> y2 >> x2;
 		Position from(y1, x1), to(y2, x2);
 		MoveChess(from, to);
 		return;
 	}
 	ChessMan* getChess(Position position)
 	{
-		return board[position.x][position.y];
+		return board[position.y][position.x];
 	}
 	void MoveChess(Position from, Position to)
 	{
@@ -48,8 +48,8 @@ public:
 			cout << "Invalid move! a" << endl;
 			return;
 		}
-		ChessMan* chess = board[from.x][from.y];
-		if (chess == nullptr)
+		ChessMan* chess = board[from.y][from.x];
+		if (chess == nullptr || chess->getColor() != starting_color)
 		{
 			if (chess == nullptr) cout << "nullptr ";
 			cout << "Invalid move! b" << endl;
@@ -57,12 +57,12 @@ public:
 		}
 		if (chess->Move(to, *this) == true)
 		{
-			board[from.x][from.y] = nullptr;
-			if (board[to.x][to.y] == nullptr)
+			board[from.y][from.x] = nullptr;
+			if (board[to.y][to.x] == nullptr)
 			{
 				chess->position = to;
 				chess->step++;
-				board[to.x][to.y] = chess;
+				board[to.y][to.x] = chess;
 			}
 			starting_color = (starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white);
 			return;
@@ -73,11 +73,12 @@ public:
 			return;
 		}
 	}
-	void EatChess(Position pos)
+	ChessMan* EatChess(Position pos)
 	{
-		ChessMan* chess = board[pos.x][pos.y];
-		board[pos.x][pos.y] = nullptr;
-		return;
+		ChessMan* chess = getChess(pos);
+		board[pos.y][pos.x] = nullptr;
+		delete chess;
+		return nullptr;
 	}
 	void Promotion(Position pos)
 	{
@@ -87,32 +88,28 @@ public:
 		cout << "3. Bishop" << endl;
 		cout << "4. Knight" << endl;
 		int choice;
-		retry:
+	retry:
 		cin >> choice;
 		ChessMan* chess = getChess(pos);
-		ChessMan::Color color = chess->color;
+		ChessMan::Color color = chess->getColor();
 		switch (choice)
 		{
-			case 1:
-				//delete chess;
-				//board[pos.x][pos.y] = new Queen(color, pos);
-				break;
-			case 2:
-				//delete chess;
-				//board[pos.x][pos.y] = new Rook(color, pos);
-				break;
-			case 3:
-				//delete chess;
-				//board[pos.x][pos.y] = new Bishop(color, pos);
-				break;
-			case 4:
-				//delete chess;
-				//board[pos.x][pos.y] = new Knight(color, pos);
-				break;
-			default:
-				cout << "Invalid choice!" << endl;
-				goto retry;
-				break;
+		case 1:
+			//board[pos.y][pos.x] = new Queen(color, pos);
+			break;
+		case 2:
+			//board[pos.y][pos.x] = new Rook(color, pos);
+			break;
+		case 3:
+			//board[pos.y][pos.x] = new Bishop(color, pos);
+			break;
+		case 4:
+			//mainBoard.board[pos.y][pos.x] = new Knight(color, pos);
+			break;
+		default:
+			cout << "Invalid choice!" << endl;
+			goto retry;
+			break;
 		}
 		return;
 	}

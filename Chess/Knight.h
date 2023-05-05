@@ -3,11 +3,9 @@
 #include <vector>
 using namespace std;
 
-class Board;
-
 class Knight : public ChessMan
 {
-	public:
+public:
 	Knight(Color col, Position position) : ChessMan(col, position)
 	{
 		if (col == Color::white)
@@ -29,15 +27,11 @@ class Knight : public ChessMan
 		{
 			return false;
 		}
-		vector<Position> accessable = { {position.x - 2, position.y - 1}, {position.x - 2, position.y + 1},
-						   {position.x - 1, position.y - 2}, {position.x - 1, position.y + 2},
-						   {position.x + 1, position.y - 2}, {position.x + 1, position.y + 2},
-						   {position.x + 2, position.y - 1}, {position.x + 2, position.y + 1} };
-		for (int i = 0; i < accessable.size(); i++)
-		{
-			cout << accessable[i].x << " " << accessable[i].y << endl;
-		}
-		if (find(accessable.begin(), accessable.end(), newPosition) != accessable.end())
+		vector<Position> accessable = { {position.y - 1, position.x - 2}, {position.y + 1, position.x - 2},
+						   {position.y - 2, position.x - 1}, {position.y + 2, position.x - 1},
+						   {position.y - 2, position.x + 1}, {position.y + 2, position.x + 1},
+						   {position.y - 1, position.x + 2}, {position.y + 1, position.x + 2} };
+		if (find(accessable.begin(),accessable.end(),newPosition ) != accessable.end())
 		{
 			if (mainBoard.getChess(newPosition) == nullptr)
 			{

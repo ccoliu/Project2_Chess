@@ -16,13 +16,13 @@ int main()
 	}
 	for (int i = 0; i < 8; i++)
 	{
-		bd.board[1][i] = new Pawn(ChessMan::Color::black, Position(i, 1));
-		bd.board[6][i] = new Pawn(ChessMan::Color::white, Position(i, 6));
+		bd.board[1][i] = new Pawn(ChessMan::Color::black, Position(1, i));
+		bd.board[6][i] = new Pawn(ChessMan::Color::white, Position(6, i));
 	}
-	bd.board[0][1] = new Knight(ChessMan::Color::black, Position(1, 0));
-	bd.board[0][6] = new Knight(ChessMan::Color::black, Position(6, 0));
-	bd.board[7][1] = new Knight(ChessMan::Color::white, Position(1, 7));
-	bd.board[7][6] = new Knight(ChessMan::Color::white, Position(6, 7));
+	bd.board[0][1] = new Knight(ChessMan::Color::black, Position(0, 1));
+	bd.board[0][6] = new Knight(ChessMan::Color::black, Position(0, 6));
+	bd.board[7][1] = new Knight(ChessMan::Color::white, Position(7, 1));
+	bd.board[7][6] = new Knight(ChessMan::Color::white, Position(7, 6));
 	while (true)
 	{
 		bd.DrawBoard();

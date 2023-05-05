@@ -16,7 +16,7 @@ class Pawn : public ChessMan
 			this->icon = 'p';
 		}
 	};
-	virtual bool Move(Position newPosition, Board mainBoard) override
+	bool Move(Position newPosition, Board mainBoard) override
 	{
 		if (newPosition == position)
 		{
@@ -30,11 +30,11 @@ class Pawn : public ChessMan
 		{
 			return false;
 		}
-		if (this->color == Color::white)
+		if (this->color == Color::black)
 		{
 			if (this->step == 0)
 			{
-				if (newPosition == Position(position.x, position.y + 1) || newPosition == Position(position.x, position.y + 2))
+				if (newPosition == Position(position.y + 1, position.x) || newPosition == Position(position.y + 2, position.x))
 				{
 					return true;
 				}
@@ -45,20 +45,20 @@ class Pawn : public ChessMan
 			}
 			else
 			{
-				ChessMan* UpperLeftChess = mainBoard.getChess(Position(position.x - 1, position.y + 1));
-				ChessMan* UpperRightChess = mainBoard.getChess(Position(position.x + 1, position.y + 1));
-				ChessMan* LeftChess = mainBoard.getChess(Position(position.x - 1, position.y));
-				ChessMan* RightChess = mainBoard.getChess(Position(position.x + 1, position.y));
-				if (newPosition == Position(position.x - 1, position.y + 1))
+				ChessMan* UpperLeftChess = mainBoard.getChess(Position(position.y + 1, position.x - 1));
+				ChessMan* UpperRightChess = mainBoard.getChess(Position(position.y + 1, position.x + 1));
+				ChessMan* LeftChess = mainBoard.getChess(Position(position.y, position.x - 1));
+				ChessMan* RightChess = mainBoard.getChess(Position(position.y, position.x + 1));
+				if (newPosition == Position(position.y + 1, position.y - 1))
 				{
 					if (UpperLeftChess != nullptr && UpperLeftChess->getColor() != this->color)
 					{
-						mainBoard.EatChess(Position(position.x - 1, position.y + 1));
+						mainBoard.EatChess(Position(position.y + 1, position.x - 1));
 						return true;
 					}
 					else if (LeftChess != nullptr && LeftChess->getColor() != this->color && typeid(*LeftChess) == typeid(Pawn) && LeftChess->getStep() == 1)
 					{
-						mainBoard.EatChess(Position(position.x + 1, position.y));
+						mainBoard.EatChess(Position(position.y, position.x + 1));
 						return true;
 					}
 					else
@@ -66,16 +66,16 @@ class Pawn : public ChessMan
 						return false;
 					}
 				}
-				else if (newPosition == Position(position.x + 1, position.y + 1))
+				else if (newPosition == Position(position.y + 1, position.x + 1))
 				{
 					if (UpperRightChess != nullptr && UpperRightChess->getColor() != this->color)
 					{
-						mainBoard.EatChess(Position(position.x + 1, position.y + 1));
+						mainBoard.EatChess(Position(position.y + 1, position.x + 1));
 						return true;
 					}
 					else if (RightChess != nullptr && RightChess->getColor() != this->color && typeid(*RightChess) == typeid(Pawn) && RightChess->getStep() == 1)
 					{
-						mainBoard.EatChess(Position(position.x + 1, position.y));
+						mainBoard.EatChess(Position(position.y, position.x + 1));
 						return true;
 					}
 					else
@@ -83,11 +83,11 @@ class Pawn : public ChessMan
 						return false;
 					}
 				}
-				else if (newPosition == Position(position.x, position.y + 1))
+				else if (newPosition == Position(position.y + 1, position.x))
 				{
 					if (position.y + 1 == 7)
 					{
-						mainBoard.Promotion(Position(position.x, position.y + 1));
+						mainBoard.Promotion(Position(position.y + 1, position.x));
 					}
 					return true;
 				}
@@ -101,7 +101,7 @@ class Pawn : public ChessMan
 		{
 			if (this->step == 0)
 			{
-				if (newPosition == Position(position.x, position.y - 1) || newPosition == Position(position.x, position.y - 2))
+				if (newPosition == Position(position.y - 1, position.x) || newPosition == Position(position.y - 2, position.x))
 				{
 					return true;
 				}
@@ -112,20 +112,20 @@ class Pawn : public ChessMan
 			}
 			else
 			{
-				ChessMan* LowerLeftChess = mainBoard.getChess(Position(position.x - 1, position.y - 1));
-				ChessMan* LowerRightChess = mainBoard.getChess(Position(position.x + 1, position.y - 1));
-				ChessMan* LeftChess = mainBoard.getChess(Position(position.x - 1, position.y));
-				ChessMan* RightChess = mainBoard.getChess(Position(position.x + 1, position.y));
-				if (newPosition == Position(position.x - 1, position.y - 1))
+				ChessMan* LowerLeftChess = mainBoard.getChess(Position(position.y - 1, position.x - 1));
+				ChessMan* LowerRightChess = mainBoard.getChess(Position(position.y - 1, position.x + 1));
+				ChessMan* LeftChess = mainBoard.getChess(Position(position.y, position.x - 1));
+				ChessMan* RightChess = mainBoard.getChess(Position(position.y, position.x + 1));
+				if (newPosition == Position(position.y - 1, position.x - 1))
 				{
 					if (LowerLeftChess != nullptr && LowerLeftChess->getColor() != this->color)
 					{
-						mainBoard.EatChess(Position(position.x - 1, position.y - 1));
+						mainBoard.EatChess(Position(position.y - 1, position.x - 1));
 						return true;
 					}
 					else if (LeftChess != nullptr && LeftChess->getColor() != this->color && typeid(*LeftChess) == typeid(Pawn) && LeftChess->getStep() == 1)
 					{
-						mainBoard.EatChess(Position(position.x + 1, position.y));
+						mainBoard.EatChess(Position(position.y, position.x + 1));
 						return true;
 					}
 					else
@@ -133,16 +133,16 @@ class Pawn : public ChessMan
 						return false;
 					}
 				}
-				else if (newPosition == Position(position.x + 1, position.y - 1))
+				else if (newPosition == Position(position.y - 1, position.x + 1))
 				{
 					if (LowerRightChess != nullptr && LowerRightChess->getColor() != this->color)
 					{
-						mainBoard.EatChess(Position(position.x + 1, position.y - 1));
+						mainBoard.EatChess(Position(position.y - 1, position.x + 1));
 						return true;
 					}
 					else if (RightChess != nullptr && RightChess->getColor() != this->color && typeid(*RightChess) == typeid(Pawn) && RightChess->getStep() == 1)
 					{
-						mainBoard.EatChess(Position(position.x + 1, position.y));
+						mainBoard.EatChess(Position(position.y, position.x + 1));
 						return true;
 					}
 					else
@@ -150,11 +150,11 @@ class Pawn : public ChessMan
 						return false;
 					}
 				}
-				else if (newPosition == Position(position.x, position.y - 1))
+				else if (newPosition == Position(position.y - 1, position.x))
 				{
 					if (position.y - 1 == 0)
 					{
-						mainBoard.Promotion(Position(position.x, position.y - 1));
+						mainBoard.Promotion(Position(position.y - 1, position.x));
 					}
 					return true;
 				}
