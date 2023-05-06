@@ -29,6 +29,17 @@ int main()
 	bd.board[0][7] = new Rook(ChessMan::Color::black, Position(0, 7));
 	bd.board[7][0] = new Rook(ChessMan::Color::white, Position(7, 0));
 	bd.board[7][7] = new Rook(ChessMan::Color::white, Position(7, 7));
+
+	bd.board[0][2] = new Bishop(ChessMan::Color::black, Position(0, 2));
+	bd.board[0][5] = new Bishop(ChessMan::Color::black, Position(0, 5));
+	bd.board[7][2] = new Bishop(ChessMan::Color::white, Position(7, 2));
+	bd.board[7][5] = new Bishop(ChessMan::Color::white, Position(7, 5));
+
+	bd.board[0][3] = new Queen(ChessMan::Color::black, Position(0, 3));
+	bd.board[7][3] = new Queen(ChessMan::Color::white, Position(7, 3));
+
+	bd.board[0][4] = new King(ChessMan::Color::black, Position(0, 4));
+	bd.board[7][4] = new King(ChessMan::Color::white, Position(7, 4));
 	while (true)
 	{
 		bd.DrawBoard();

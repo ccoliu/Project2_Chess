@@ -3,10 +3,10 @@
 #include <vector>
 using namespace std;
 
-class Rook : public ChessMan
+class Queen : public ChessMan
 {
 public:
-	Rook(Color col, Position position) : ChessMan(col, position)
+	Queen(Color col, Position position) : ChessMan(col, position)
 	{
 		if (col == Color::white)
 		{
