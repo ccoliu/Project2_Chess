@@ -18,56 +18,20 @@ public:
 			this->icon = 'q';
 		}
 	};
-	//check whether the new position can move
-	bool Move(Position newPosition, Board mainBoard) override
+	vector<Position> Move(Position newPosition) override
 	{
-		if (newPosition == position || (mainBoard.getChess(newPosition) != nullptr && mainBoard.getChess(newPosition)->getColor() == this->color))
+		vector<Position> accessable;
+		for (int i = 0; i < 7; i++)
 		{
-			return false;
+			accessable.push_back(Position(position.y + i, position.x));
+			accessable.push_back(Position(position.y - i, position.x));
+			accessable.push_back(Position(position.y, position.x + i));
+			accessable.push_back(Position(position.y, position.x - i));
+			accessable.push_back(Position(position.y + i, position.x+i));
+			accessable.push_back(Position(position.y + i, position.x-i));
+			accessable.push_back(Position(position.y-i, position.x + i));
+			accessable.push_back(Position(position.y-i, position.x - i));
 		}
-		if (newPosition.x < 0 || newPosition.x > 7 || newPosition.y < 0 || newPosition.y > 7)
-		{
-			return false;
-		}
-		if (abs(newPosition.x - this->position.x)  != abs(newPosition.y - this->position.y) )
-		{
-			return false;
-		}
-		if (newPosition.x - this->position.x > 0)
-		{
-			if (mainBoard.getChess(newPosition) == nullptr)
-			{
-				return true;
-			}
-			else if (mainBoard.getChess(newPosition)->getColor() != this->color)
-			{
-				mainBoard.EatChess(newPosition);
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else if (newPosition.y - this->position.y != 0)
-		{
-			if (mainBoard.getChess(newPosition) == nullptr)
-			{
-				return true;
-			}
-			else if (mainBoard.getChess(newPosition)->getColor() != this->color)
-			{
-				mainBoard.EatChess(newPosition);
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
+		return accessable;
 	}
 };
