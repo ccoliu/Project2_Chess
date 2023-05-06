@@ -11,7 +11,7 @@ public:
 	{
 		if (col == Color::white)
 		{
-			this->icon = 'Q';
+			this->icon = 'B';
 		}
 		else
 		{
