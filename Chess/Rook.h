@@ -18,7 +18,6 @@ public:
 			this->icon = 'r';
 		}
 	};
-	//check whether the new position can move
 	vector<Position> Move(Position newPosition) override
 	{
 		vector<Position> accessable;
