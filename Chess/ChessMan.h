@@ -1,6 +1,8 @@
 #pragma once
 #include "Board.h"
 #include "Position.h"
+#include <vector>
+using namespace std;
 
 class ChessMan
 {
@@ -14,7 +16,7 @@ public:
 	int getStep() { return step; };
 	Color getColor() { return color; };
 	virtual ~ChessMan() {};
-	virtual bool Move(Position newPosition, Board mainBoard) = 0;
+	virtual vector<Position> Move(Position newPosition) = 0;
 
 protected:
 	int step = 0;

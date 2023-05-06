@@ -1,6 +1,9 @@
 #pragma once
 #include "ChessMan.h"
+#include "Knight.h"
+#include "Pawn.h"
 #include <iostream>
+#include "Rook.h"
 using namespace std;
 
 class Board {
@@ -45,32 +48,256 @@ public:
 	{
 		if (from.x < 0 || from.x > 7 || from.y < 0 || from.y > 7 || to.x < 0 || to.x > 7 || to.y < 0 || to.y > 7)
 		{
-			cout << "Invalid move! a" << endl;
+			cout << "Invalid move: out of range!" << endl;
+			return;
+		}
+		if (from == to)
+		{
+			cout << "Invalid move: same position!" << endl;
 			return;
 		}
 		ChessMan* chess = board[from.y][from.x];
 		if (chess == nullptr || chess->getColor() != starting_color)
 		{
 			if (chess == nullptr) cout << "nullptr ";
-			cout << "Invalid move! b" << endl;
+			cout << "Invalid move: Chess unavailable!" << endl;
 			return;
 		}
-		if (chess->Move(to, *this) == true)
+		vector<Position> moves = chess->Move(to);
+		if (typeid(*chess) == typeid(Pawn))
 		{
-			board[from.y][from.x] = nullptr;
-			if (board[to.y][to.x] == nullptr)
+			if (find(moves.begin(), moves.end(), to) == moves.end())
 			{
-				chess->position = to;
-				chess->step++;
-				board[to.y][to.x] = chess;
+				cout << "Invalid move: Move not available!" << endl;
+				return;
 			}
-			starting_color = (starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white);
-			return;
+			else
+			{
+				if (to.x - from.x != 0 && to.y - from.y != 0)
+				{
+					if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
+					{
+						EatChess(to);
+						board[to.y][to.x] = chess;
+						chess->position = to;
+						chess->step++;
+						board[from.y][from.x] = nullptr;
+						if (to.y == 0 || to.y == 7) Promotion(to);
+						starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+					}
+					else if (getChess(Position(from.y, from.x - 1)) != nullptr && typeid(*getChess(Position(from.y, from.x - 1))) == typeid(Pawn) && getChess(Position(from.y, from.x - 1))->getColor() != chess->getColor() && getChess(Position(from.y, from.x - 1))->getStep() == 1)
+					{
+						EatChess(Position(from.y, from.x - 1));
+						board[to.y][to.x] = chess;
+						chess->position = to;
+						chess->step++;
+						board[from.y][from.x] = nullptr;
+						if (to.y == 0 || to.y == 7) Promotion(to);
+						starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+					}
+					else if (getChess(Position(from.y, from.x + 1)) != nullptr && typeid(*getChess(Position(from.y, from.x + 1))) == typeid(Pawn) && getChess(Position(from.y, from.x + 1))->getColor() != chess->getColor() && getChess(Position(from.y, from.x + 1))->getStep() == 1)
+					{
+						EatChess(Position(from.y, from.x + 1));
+						board[to.y][to.x] = chess;
+						chess->position = to;
+						chess->step++;
+						board[from.y][from.x] = nullptr;
+						if (to.y == 0 || to.y == 7) Promotion(to);
+						starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+					}
+					else
+					{
+						cout << "Invalid move: Move not available!" << endl;
+						return;
+					}
+				}
+				else
+				{
+					board[to.y][to.x] = chess;
+					chess->position = to;
+					chess->step++;
+					board[from.y][from.x] = nullptr;
+					if (to.y == 0 || to.y == 7) Promotion(to);
+					starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+				}
+			}
 		}
-		else
+		else if (typeid(*chess) == typeid(Knight))
 		{
-			cout << "Invalid move! c" << endl;
-			return;
+			if (find(moves.begin(), moves.end(), to) == moves.end())
+			{
+				cout << "Invalid move: Move not available!" << endl;
+				return;
+			}
+			else
+			{
+				if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
+				{
+					EatChess(to);
+					board[to.y][to.x] = chess;
+					chess->position = to;
+					chess->step++;
+					board[from.y][from.x] = nullptr;
+					starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+				}
+				else if (getChess(to) == nullptr)
+				{
+					board[to.y][to.x] = chess;
+					chess->position = to;
+					chess->step++;
+					board[from.y][from.x] = nullptr;
+					starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+				}
+				else
+				{
+					cout << "Invalid move: Move not available!" << endl;
+					return;
+				}
+			}
+		}
+		else if (typeid(*chess) == typeid(Rook))
+		{
+			if (find(moves.begin(), moves.end(), to) == moves.end())
+			{
+				cout << "Invalid move: Move not available!" << endl;
+				return;
+			}
+			else
+			{
+				if (to.x == from.x)
+				{
+					if (to.y > from.y)
+					{
+						for (int i = from.y + 1; i < to.y; i++)
+						{
+							if (getChess(Position(i, to.x)) != nullptr)
+							{
+								cout << "Invalid move: Move not available!" << endl;
+								return;
+							}
+						}
+						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
+						{
+							EatChess(to);
+							board[to.y][to.x] = chess;
+							chess->position = to;
+							chess->step++;
+							board[from.y][from.x] = nullptr;
+							starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+						}
+						else if (getChess(to) == nullptr)
+						{
+							board[to.y][to.x] = chess;
+							chess->position = to;
+							chess->step++;
+							board[from.y][from.x] = nullptr;
+							starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+						}
+						else
+						{
+							cout << "Invalid move: Move not available!" << endl;
+							return;
+						}
+					}
+					else
+					{
+						for (int i = from.y - 1; i > to.y; i--)
+						{
+							if (getChess(Position(i, to.x)) != nullptr)
+							{
+								cout << "Invalid move: Move not available!" << endl;
+								return;
+							}
+						}
+						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
+						{
+							EatChess(to);
+							board[to.y][to.x] = chess;
+							chess->position = to;
+							chess->step++;
+							board[from.y][from.x] = nullptr;
+							starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+						}
+						else if (getChess(to) == nullptr)
+						{
+							board[to.y][to.x] = chess;
+							chess->position = to;
+							chess->step++;
+							board[from.y][from.x] = nullptr;
+							starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+						}
+						else
+						{
+							cout << "Invalid move: Move not available!" << endl;
+							return;
+						}
+					}
+				}
+				else
+				{
+					if (to.x > from.x)
+					{
+						for (int i = from.x + 1; i < to.x; i++)
+						{
+							if (getChess(Position(to.y, i)) != nullptr)
+							{
+								cout << "Invalid move: Move not available!" << endl;
+								return;
+							}
+						}
+						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
+						{
+							EatChess(to);
+							board[to.y][to.x] = chess;
+							chess->position = to;
+							chess->step++;
+							board[from.y][from.x] = nullptr;
+							starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+						}
+						else if (getChess(to) == nullptr)
+						{
+							board[to.y][to.x] = chess;
+							chess->position = to;
+							chess->step++;
+							board[from.y][from.x] = nullptr;
+							starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+						}
+						else
+						{
+							cout << "Invalid move: Move not available!" << endl;
+							return;
+						}
+					}
+					else
+					{
+						for (int i = from.x - 1; i > to.x; i--)
+						{
+							if (getChess(Position(to.y, i)) != nullptr)
+							{
+								cout << "Invalid move: Move not available!" << endl;
+								return;
+							}
+						}
+						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
+						{
+							EatChess(to);
+							board[to.y][to.x] = chess;
+							chess->position = to;
+							chess->step++;
+							board[from.y][from.x] = nullptr;
+							starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+						}
+						else if (getChess(to) == nullptr)
+						{
+							board[to.y][to.x] = chess;
+							chess->position = to;
+							chess->step++;
+							board[from.y][from.x] = nullptr;
+							starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+						}
+					}
+				}
+			}
 		}
 	}
 	ChessMan* EatChess(Position pos)
@@ -92,19 +319,21 @@ public:
 		cin >> choice;
 		ChessMan* chess = getChess(pos);
 		ChessMan::Color color = chess->getColor();
+		delete chess;
+		board[pos.y][pos.x] = nullptr;
 		switch (choice)
 		{
 		case 1:
 			//board[pos.y][pos.x] = new Queen(color, pos);
 			break;
 		case 2:
-			//board[pos.y][pos.x] = new Rook(color, pos);
+			board[pos.y][pos.x] = new Rook(color, pos);
 			break;
 		case 3:
 			//board[pos.y][pos.x] = new Bishop(color, pos);
 			break;
 		case 4:
-			//mainBoard.board[pos.y][pos.x] = new Knight(color, pos);
+			board[pos.y][pos.x] = new Knight(color, pos);
 			break;
 		default:
 			cout << "Invalid choice!" << endl;
