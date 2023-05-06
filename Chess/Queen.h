@@ -6,7 +6,6 @@ using namespace std;
 class Rook : public ChessMan
 {
 public:
-	//initialize the queen
 	Rook(Color col, Position position) : ChessMan(col, position)
 	{
 		if (col == Color::white)

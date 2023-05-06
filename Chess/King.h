@@ -6,7 +6,6 @@ using namespace std;
 class King : public ChessMan
 {
 public:
-	//initialize the queen
 	King(Color col, Position position) : ChessMan(col, position)
 	{
 		if (col == Color::white)
@@ -15,7 +14,7 @@ public:
 		}
 		else
 		{
-			this->icon = 'q';
+			this->icon = 'k';
 		}
 	};
 	vector<Position> Move(Position newPosition) override

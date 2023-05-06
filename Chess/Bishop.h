@@ -6,7 +6,6 @@ using namespace std;
 class Bishop : public ChessMan
 {
 public:
-	//initialize the queen
 	Bishop(Color col, Position position) : ChessMan(col, position)
 	{
 		if (col == Color::white)
@@ -15,7 +14,7 @@ public:
 		}
 		else
 		{
-			this->icon = 'q';
+			this->icon = 'b';
 		}
 	};
 	vector<Position> Move(Position newPosition) override
