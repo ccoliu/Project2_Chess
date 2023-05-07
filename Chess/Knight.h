@@ -10,11 +10,11 @@ public:
 	{
 		if (col == Color::white)
 		{
-			this->icon = 'N';
+			this->icon = 'n';
 		}
 		else
 		{
-			this->icon = 'n';
+			this->icon = 'N';
 		}
 	};
 	vector<Position> Move(Position newPosition) override

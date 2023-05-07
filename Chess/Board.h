@@ -15,8 +15,55 @@ private:
 	ChessMan::Color starting_color = ChessMan::Color::white;
 public:
 	ChessMan* board[8][8] = { nullptr };
+	Position blackKing, whiteKing;
 	Board()
 	{
+		for (int i = 0; i < 8; i++)
+		{
+			board[1][i] = new Pawn(ChessMan::Color::black, Position(1, i));
+			board[6][i] = new Pawn(ChessMan::Color::white, Position(6, i));
+		}
+		board[0][1] = new Knight(ChessMan::Color::black, Position(0, 1));
+		board[0][6] = new Knight(ChessMan::Color::black, Position(0, 6));
+		board[7][1] = new Knight(ChessMan::Color::white, Position(7, 1));
+		board[7][6] = new Knight(ChessMan::Color::white, Position(7, 6));
+
+		board[0][0] = new Rook(ChessMan::Color::black, Position(0, 0));
+		board[0][7] = new Rook(ChessMan::Color::black, Position(0, 7));
+		board[7][0] = new Rook(ChessMan::Color::white, Position(7, 0));
+		board[7][7] = new Rook(ChessMan::Color::white, Position(7, 7));
+
+		board[0][2] = new Bishop(ChessMan::Color::black, Position(0, 2));
+		board[0][5] = new Bishop(ChessMan::Color::black, Position(0, 5));
+		board[7][2] = new Bishop(ChessMan::Color::white, Position(7, 2));
+		board[7][5] = new Bishop(ChessMan::Color::white, Position(7, 5));
+
+		board[0][3] = new Queen(ChessMan::Color::black, Position(0, 3));
+		board[7][3] = new Queen(ChessMan::Color::white, Position(7, 3));
+
+		board[0][4] = new King(ChessMan::Color::black, Position(0, 4));
+		board[7][4] = new King(ChessMan::Color::white, Position(7, 4));
+
+		blackKing = Position(0, 4);
+		whiteKing = Position(7, 4);
+	}
+	int isCheckmated(Position pos)
+	{	
+		int count = 0;
+		ChessMan* king = getChess(pos);
+		for (int i = 0; i < 7; i++)
+		{
+			for (int j = 0; j < 7; j++)
+			{
+				ChessMan* chess = getChess(Position(i, j));
+				if (chess->position == pos || chess == nullptr || chess->getColor() != king->getColor()) continue;
+				if (MoveChess(chess->position, pos) == true)
+				{
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 	void DrawBoard()
 	{
@@ -601,18 +648,126 @@ public:
 			}
 			else
 			{
-				if (getChess(to) != nullptr && getChess(to)->getColor() != chess->color)
+				int Checkmate = isCheckmated(to);
+				if (getChess(to) != nullptr && getChess(to)->getColor() != chess->color && Checkmate > 0)
 				{
 					EatChess(to);
 					return true;
 				}
-				else if (getChess(to) == nullptr)
+				else if (getChess(to) == nullptr && Checkmate > 0)
 				{
 					return true;
 				}
+				else if (to.y == from.y && abs(to.x - from.x) == 2) //Castling
+				{
+					if (getChess(to)->getStep() != 0)
+					{
+						cout << "Invalid move: Move not available!" << endl;
+						return false;
+					}
+					bool hasRook = false;
+					ChessMan* rook = nullptr;
+					if (to.x < from.x)
+					{
+						for (int i = from.x - 1; i > 0; i--)
+						{
+							if (typeid(*getChess(Position(to.y, i))) == typeid(Rook))
+							{
+								hasRook = true;
+								rook = getChess(Position(to.y, i));
+							}
+							if (getChess(Position(to.y, i)) != nullptr)
+							{
+								cout << "Invalid move: Move not available!" << endl;
+								return false;
+							}
+						}
+						if (!hasRook)
+						{
+							cout << "Invalid move: No rook for castling!" << endl;
+							return false;
+						}
+						else
+						{
+							if (rook->getStep() == 0 && Checkmate > 0)
+							{
+								Position rookPos = rook->position;
+								board[to.y][to.x + 1] = rook;
+								rook->position = Position(to.y, to.x + 1);
+								rook->step++;
+								board[rookPos.y][rookPos.x] = nullptr;
+								return true;
+							}
+							else
+							{
+								if (Checkmate > 0)
+								{
+									cout << "Invalid move: Checkmate alert!" << endl;
+								}
+								else
+								{
+									cout << "Invalid move: Rook has moved!" << endl;
+								}
+								return false;
+							}
+						}
+					}
+					else
+					{
+						for (int i = from.x + 1; i < 8; i++)
+						{
+							if (typeid(*getChess(Position(to.y, i))) == typeid(Rook))
+							{
+								hasRook = true;
+								rook = getChess(Position(to.y, i));
+							}
+							if (getChess(Position(to.y, i)) != nullptr)
+							{
+								cout << "Invalid move: Move not available!" << endl;
+								return false;
+							}
+						}
+						if (!hasRook)
+						{
+							cout << "Invalid move: No rook for castling!" << endl;
+							return false;
+						}
+						else
+						{
+							if (rook->getStep() == 0 && Checkmate > 0)
+							{
+								Position rookPos = rook->position;
+								board[to.y][to.x - 1] = rook;
+								rook->position = Position(to.y, to.x - 1);
+								rook->step++;
+								board[rookPos.y][rookPos.x] = nullptr;
+								return true;
+							}
+							else
+							{
+								if (Checkmate > 0)
+								{
+									cout << "Invalid move: Checkmate alert!" << endl;
+								}
+								else
+								{
+									cout << "Invalid move: Rook has moved!" << endl;
+								}
+								return false;
+							}
+						}
+					}
+				}
 				else
 				{
-					cout << "Invalid move: Move not available!" << endl;
+					if (isCheckmated(to))
+					{
+						cout << "Invalid move: Checkmate alert!" << endl;
+					}
+					else
+					{
+						cout << "Invalid move: Move not available!" << endl;
+					}
 					return false;
 				}
 			}
