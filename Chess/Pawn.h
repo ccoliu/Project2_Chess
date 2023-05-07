@@ -9,11 +9,11 @@ class Pawn : public ChessMan
 	{
 		if (col == Color::white)
 		{
-			this->icon = 'P';
+			this->icon = 'p';
 		}
 		else
 		{
-			this->icon = 'p';
+			this->icon = 'P';
 		}
 	};
 	vector<Position> Move(Position newPosition) override
