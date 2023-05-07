@@ -108,7 +108,7 @@ public:
 				cout << "Black wins!" << endl;
 				exit(0);
 			}
-			else
+			else if (getChess(blackKing) == nullptr)
 			{
 				cout << "White wins!" << endl;
 				exit(0);

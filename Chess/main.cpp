@@ -1,17 +1,9 @@
 #include <iostream>
-#include "Board.h"
-#include "Knight.h"
-#include "Pawn.h"
-#include "Rook.h"
+#include "GameManager.h"
 using namespace std;
 
 int main()
 {
-	Board bd = Board();
-	
-	while (true)
-	{
-		bd.DrawBoard();
-		bd.initMove();
-	}
+	GameManager game = GameManager();
+	game.StartGame();
 }
