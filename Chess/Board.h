@@ -50,15 +50,25 @@ public:
 	int isCheckmated(Position pos)
 	{	
 		int count = 0;
-		ChessMan* king = getChess(pos);
 		for (int i = 0; i < 7; i++)
 		{
 			for (int j = 0; j < 7; j++)
 			{
-				ChessMan* chess = getChess(Position(i, j));
-				if (chess->position == pos || chess == nullptr || chess->getColor() != king->getColor()) continue;
-				if (MoveChess(chess->position, pos) == true)
+				if (i == 4 && j == 6)
 				{
+					ChessMan* chess = getChess(Position(i, j));
+					cout << (chess == nullptr) << endl;
+					cout << (chess->position == pos || chess->getColor() == starting_color) << endl;
+					Position from = Position(i, j);
+					Position to = Position(pos.y, pos.x);
+					cout << MoveChess(from, to, 0) << endl;
+				}
+				ChessMan* chess = getChess(Position(i, j));
+				if (chess == nullptr) continue;
+				if (chess->position == pos || chess->getColor() == starting_color) continue;
+				if (MoveChess(chess->position, pos, 0) == true)
+				{
+					cout << chess->position.y << " " << chess->position.x << endl;
 					count++;
 				}
 			}
@@ -89,7 +99,7 @@ public:
 		int x1, y1, x2, y2;
 		cin >> y1 >> x1 >> y2 >> x2;
 		Position from(y1, x1), to(y2, x2);
-		if (MoveChess(from, to) == true)
+		if (MoveChess(from, to, 1) == true)
 		{
 			ChessMan* chess = board[from.y][from.x];
 			board[to.y][to.x] = chess;
@@ -120,23 +130,23 @@ public:
 	{
 		return board[position.y][position.x];
 	}
-	bool MoveChess(Position from, Position to)
+	bool MoveChess(Position from, Position to, int k)
 	{
 		if (from.x < 0 || from.x > 7 || from.y < 0 || from.y > 7 || to.x < 0 || to.x > 7 || to.y < 0 || to.y > 7)
 		{
-			cout << "Invalid move: out of range!" << endl;
+			if (k) cout << "Invalid move: out of range!" << endl;
 			return false;
 		}
 		if (from == to)
 		{
-			cout << "Invalid move: same position!" << endl;
+			if (k) cout << "Invalid move: same position!" << endl;
 			return false;
 		}
 		ChessMan* chess = board[from.y][from.x];
 		if (chess == nullptr || chess->getColor() != starting_color)
 		{
-			if (chess == nullptr) cout << "nullptr ";
-			cout << "Invalid move: Chess unavailable!" << endl;
+			if (chess == nullptr && k) cout << "nullptr ";
+			if (k) cout << "Invalid move: Chess unavailable!" << endl;
 			return false;
 		}
 		vector<Position> moves = chess->Move(to);
@@ -144,7 +154,7 @@ public:
 		{
 			if (find(moves.begin(), moves.end(), to) == moves.end())
 			{
-				cout << "Invalid move: Move not available!" << endl;
+				if (k) cout << "Invalid move: Move not available!" << endl;
 				return false;
 			}
 			else
@@ -153,22 +163,22 @@ public:
 				{
 					if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 					{
-						EatChess(to);
+						if (k) EatChess(to);
 						return true;
 					}
 					else if (getChess(Position(from.y, from.x - 1)) != nullptr && typeid(*getChess(Position(from.y, from.x - 1))) == typeid(Pawn) && getChess(Position(from.y, from.x - 1))->getColor() != chess->getColor() && getChess(Position(from.y, from.x - 1))->getStep() == 1)
 					{
-						EatChess(Position(from.y, from.x - 1));
+						if (k) EatChess(Position(from.y, from.x - 1));
 						return true;
 					}
 					else if (getChess(Position(from.y, from.x + 1)) != nullptr && typeid(*getChess(Position(from.y, from.x + 1))) == typeid(Pawn) && getChess(Position(from.y, from.x + 1))->getColor() != chess->getColor() && getChess(Position(from.y, from.x + 1))->getStep() == 1)
 					{
-						EatChess(Position(from.y, from.x + 1));
+						if (k)	EatChess(Position(from.y, from.x + 1));
 						return true;
 					}
 					else
 					{
-						cout << "Invalid move: Move not available!" << endl;
+						if (k) cout << "Invalid move: Move not available!" << endl;
 						return false;
 					}
 				}
@@ -182,14 +192,14 @@ public:
 		{
 			if (find(moves.begin(), moves.end(), to) == moves.end())
 			{
-				cout << "Invalid move: Move not available!" << endl;
+				if (k) cout << "Invalid move: Move not available!" << endl;
 				return false;
 			}
 			else
 			{
 				if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 				{
-					EatChess(to);
+					if (k) EatChess(to);
 					return true;
 				}
 				else if (getChess(to) == nullptr)
@@ -198,7 +208,7 @@ public:
 				}
 				else
 				{
-					cout << "Invalid move: Move not available!" << endl;
+					if (k) cout << "Invalid move: Move not available!" << endl;
 					return false;
 				}
 			}
@@ -207,7 +217,7 @@ public:
 		{
 			if (find(moves.begin(), moves.end(), to) == moves.end())
 			{
-				cout << "Invalid move: Move not available!" << endl;
+				if (k) cout << "Invalid move: Move not available!" << endl;
 				return false;
 			}
 			else
@@ -220,13 +230,13 @@ public:
 						{
 							if (getChess(Position(i, to.x)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
 						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 						{
-							EatChess(to);
+							if (k) EatChess(to);
 							return true;
 						}
 						else if (getChess(to) == nullptr)
@@ -235,7 +245,7 @@ public:
 						}
 						else
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
@@ -245,13 +255,13 @@ public:
 						{
 							if (getChess(Position(i, to.x)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
 						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 						{
-							EatChess(to);
+							if (k) EatChess(to);
 							return true;
 						}
 						else if (getChess(to) == nullptr)
@@ -260,7 +270,7 @@ public:
 						}
 						else
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
@@ -273,13 +283,13 @@ public:
 						{
 							if (getChess(Position(to.y, i)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
 						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 						{
-							EatChess(to);
+							if (k) EatChess(to);
 							return true;
 						}
 						else if (getChess(to) == nullptr)
@@ -288,7 +298,7 @@ public:
 						}
 						else
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
@@ -298,13 +308,13 @@ public:
 						{
 							if (getChess(Position(to.y, i)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
 						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 						{
-							EatChess(to);
+							if (k) EatChess(to);
 							return true;
 						}
 						else if (getChess(to) == nullptr)
@@ -313,7 +323,7 @@ public:
 						}
 						else
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
@@ -324,7 +334,7 @@ public:
 		{
 			if (find(moves.begin(), moves.end(), to) == moves.end())
 			{
-				cout << "Invalid move: Move not available!" << endl;
+				if (k) cout << "Invalid move: Move not available!" << endl;
 				return false;
 			}
 			else
@@ -335,13 +345,13 @@ public:
 					{
 						if (getChess(Position(j, i)) != nullptr)
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return true;
 						}
 					}
 					if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 					{
-						EatChess(to);
+						if (k) EatChess(to);
 						return true;
 					}
 					else if (getChess(to) == nullptr)
@@ -350,7 +360,7 @@ public:
 					}
 					else
 					{
-						cout << "Invalid move: Move not available!" << endl;
+						if (k) cout << "Invalid move: Move not available!" << endl;
 						return false;
 					}
 				}
@@ -360,13 +370,13 @@ public:
 					{
 						if (getChess(Position(j, i)) != nullptr)
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
 					if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 					{
-						EatChess(to);
+						if (k) EatChess(to);
 						return true;
 					}
 					else if (getChess(to) == nullptr)
@@ -375,7 +385,7 @@ public:
 					}
 					else
 					{
-						cout << "Invalid move: Move not available!" << endl;
+						if (k) cout << "Invalid move: Move not available!" << endl;
 						return false;
 					}
 				}
@@ -385,13 +395,13 @@ public:
 					{
 						if (getChess(Position(j, i)) != nullptr)
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
 					if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 					{
-						EatChess(to);
+						if (k) EatChess(to);
 						return true;
 					}
 					else if (getChess(to) == nullptr)
@@ -400,7 +410,7 @@ public:
 					}
 					else
 					{
-						cout << "Invalid move: Move not available!" << endl;
+						if (k) cout << "Invalid move: Move not available!" << endl;
 						return false;
 					}
 				}
@@ -410,13 +420,13 @@ public:
 					{
 						if (getChess(Position(j, i)) != nullptr)
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
 					if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 					{
-						EatChess(to);
+						if (k) EatChess(to);
 						return true;
 					}
 					else if (getChess(to) == nullptr)
@@ -425,7 +435,7 @@ public:
 					}
 					else
 					{
-						cout << "Invalid move: Move not available!" << endl;
+						if (k) cout << "Invalid move: Move not available!" << endl;
 						return false;
 					}
 				}
@@ -435,7 +445,7 @@ public:
 		{
 			if (find(moves.begin(), moves.end(), to) == moves.end())
 			{
-				cout << "Invalid move: Move not available!" << endl;
+				if (k) cout << "Invalid move: Move not available!" << endl;
 				return false;
 			}
 			else
@@ -448,13 +458,13 @@ public:
 						{
 							if (getChess(Position(j, i)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return true;
 							}
 						}
 						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 						{
-							EatChess(to);
+							if (k) EatChess(to);
 							return true;
 						}
 						else if (getChess(to) == nullptr)
@@ -463,7 +473,7 @@ public:
 						}
 						else
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
@@ -473,13 +483,13 @@ public:
 						{
 							if (getChess(Position(j, i)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
 						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 						{
-							EatChess(to);
+							if (k) EatChess(to);
 							return true;
 						}
 						else if (getChess(to) == nullptr)
@@ -488,7 +498,7 @@ public:
 						}
 						else
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
@@ -498,13 +508,13 @@ public:
 						{
 							if (getChess(Position(j, i)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
 						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 						{
-							EatChess(to);
+							if (k) EatChess(to);
 							return true;
 						}
 						else if (getChess(to) == nullptr)
@@ -513,7 +523,7 @@ public:
 						}
 						else
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
@@ -523,13 +533,13 @@ public:
 						{
 							if (getChess(Position(j, i)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
 						if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 						{
-							EatChess(to);
+							if (k) EatChess(to);
 							return true;
 						}
 						else if (getChess(to) == nullptr)
@@ -538,7 +548,7 @@ public:
 						}
 						else
 						{
-							cout << "Invalid move: Move not available!" << endl;
+							if (k) cout << "Invalid move: Move not available!" << endl;
 							return false;
 						}
 					}
@@ -553,13 +563,13 @@ public:
 							{
 								if (getChess(Position(i, to.x)) != nullptr)
 								{
-									cout << "Invalid move: Move not available!" << endl;
+									if (k) cout << "Invalid move: Move not available!" << endl;
 									return false;
 								}
 							}
 							if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 							{
-								EatChess(to);
+								if (k) EatChess(to);
 								return true;
 							}
 							else if (getChess(to) == nullptr)
@@ -568,7 +578,7 @@ public:
 							}
 							else
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
@@ -578,13 +588,13 @@ public:
 							{
 								if (getChess(Position(i, to.x)) != nullptr)
 								{
-									cout << "Invalid move: Move not available!" << endl;
+									if (k) cout << "Invalid move: Move not available!" << endl;
 									return false;
 								}
 							}
 							if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 							{
-								EatChess(to);
+								if (k) EatChess(to);
 								return true;
 							}
 							else if (getChess(to) == nullptr)
@@ -593,7 +603,7 @@ public:
 							}
 							else
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
@@ -606,13 +616,13 @@ public:
 							{
 								if (getChess(Position(to.y, i)) != nullptr)
 								{
-									cout << "Invalid move: Move not available!" << endl;
+									if (k) cout << "Invalid move: Move not available!" << endl;
 									return false;
 								}
 							}
 							if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 							{
-								EatChess(to);
+								if (k) EatChess(to);
 								return true;
 							}
 							else if (getChess(to) == nullptr)
@@ -621,7 +631,7 @@ public:
 							}
 							else
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
@@ -631,13 +641,13 @@ public:
 							{
 								if (getChess(Position(to.y, i)) != nullptr)
 								{
-									cout << "Invalid move: Move not available!" << endl;
+									if (k) cout << "Invalid move: Move not available!" << endl;
 									return false;
 								}
 							}
 							if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 							{
-								EatChess(to);
+								if (k) EatChess(to);
 								return true;
 							}
 							else if (getChess(to) == nullptr)
@@ -646,7 +656,7 @@ public:
 							}
 							else
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
@@ -658,18 +668,18 @@ public:
 		{
 			if (find(moves.begin(), moves.end(), to) == moves.end())
 			{
-				cout << "Invalid move: Move not available!" << endl;
+				if (k) cout << "Invalid move: Move not available!" << endl;
 				return false;
 			}
 			else
 			{
 				int Checkmate = isCheckmated(to);
-				if (getChess(to) != nullptr && getChess(to)->getColor() != chess->color && Checkmate > 0)
+				if (getChess(to) != nullptr && getChess(to)->getColor() != chess->color && Checkmate == 0)
 				{
-					EatChess(to);
+					if (k) EatChess(to);
 					return true;
 				}
-				else if (getChess(to) == nullptr && Checkmate > 0)
+				else if (getChess(to) == nullptr && Checkmate == 0)
 				{
 					return true;
 				}
@@ -677,7 +687,7 @@ public:
 				{
 					if (getChess(to)->getStep() != 0)
 					{
-						cout << "Invalid move: Move not available!" << endl;
+						if (k) cout << "Invalid move: Move not available!" << endl;
 						return false;
 					}
 					bool hasRook = false;
@@ -693,18 +703,18 @@ public:
 							}
 							if (getChess(Position(to.y, i)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
 						if (!hasRook)
 						{
-							cout << "Invalid move: No rook for castling!" << endl;
+							if (k) cout << "Invalid move: No rook for castling!" << endl;
 							return false;
 						}
 						else
 						{
-							if (rook->getStep() == 0 && Checkmate > 0)
+							if (rook->getStep() == 0 && Checkmate == 0)
 							{
 								Position rookPos = rook->position;
 								board[to.y][to.x + 1] = rook;
@@ -717,11 +727,11 @@ public:
 							{
 								if (Checkmate > 0)
 								{
-									cout << "Invalid move: Checkmate alert!" << endl;
+									if (k) cout << "Invalid move: Checkmate alert!" << endl;
 								}
 								else
 								{
-									cout << "Invalid move: Rook has moved!" << endl;
+									if (k) cout << "Invalid move: Rook has moved!" << endl;
 								}
 								return false;
 							}
@@ -738,18 +748,18 @@ public:
 							}
 							if (getChess(Position(to.y, i)) != nullptr)
 							{
-								cout << "Invalid move: Move not available!" << endl;
+								if (k) cout << "Invalid move: Move not available!" << endl;
 								return false;
 							}
 						}
 						if (!hasRook)
 						{
-							cout << "Invalid move: No rook for castling!" << endl;
+							if (k) cout << "Invalid move: No rook for castling!" << endl;
 							return false;
 						}
 						else
 						{
-							if (rook->getStep() == 0 && Checkmate > 0)
+							if (rook->getStep() == 0 && Checkmate == 0)
 							{
 								Position rookPos = rook->position;
 								board[to.y][to.x - 1] = rook;
@@ -762,11 +772,11 @@ public:
 							{
 								if (Checkmate > 0)
 								{
-									cout << "Invalid move: Checkmate alert!" << endl;
+									if (k) cout << "Invalid move: Checkmate alert!" << endl;
 								}
 								else
 								{
-									cout << "Invalid move: Rook has moved!" << endl;
+									if (k) cout << "Invalid move: Rook has moved!" << endl;
 								}
 								return false;
 							}
@@ -775,13 +785,13 @@ public:
 				}
 				else
 				{
-					if (isCheckmated(to))
+					if (Checkmate > 0)
 					{
-						cout << "Invalid move: Checkmate alert!" << endl;
+						if (k) cout << "Invalid move: Checkmate alert!" << endl;
 					}
 					else
 					{
-						cout << "Invalid move: Move not available!" << endl;
+						if (k) cout << "Invalid move: Move not available!" << endl;
 					}
 					return false;
 				}
