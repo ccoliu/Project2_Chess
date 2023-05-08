@@ -54,22 +54,23 @@ public:
 		{
 			for (int j = 0; j < 7; j++)
 			{
-				if (i == 4 && j == 6)
-				{
-					ChessMan* chess = getChess(Position(i, j));
-					cout << (chess == nullptr) << endl;
-					cout << (chess->position == pos || chess->getColor() == starting_color) << endl;
-					Position from = Position(i, j);
-					Position to = Position(pos.y, pos.x);
-					cout << MoveChess(from, to, 0) << endl;
-				}
 				ChessMan* chess = getChess(Position(i, j));
 				if (chess == nullptr) continue;
 				if (chess->position == pos || chess->getColor() == starting_color) continue;
-				if (MoveChess(chess->position, pos, 0) == true)
+				vector<Position> moves = chess->Move(pos);
 				{
-					cout << chess->position.y << " " << chess->position.x << endl;
-					count++;
+					if (find(moves.begin(), moves.end(), pos) != moves.end())
+					{
+						if (typeid(*chess) == typeid(Pawn))
+						{
+							if (chess->position.y == pos.y) continue;
+						}
+						if (typeid(*chess) == typeid(Pawn) || typeid(*chess) == typeid(Knight) || typeid(*chess) == typeid(King)) count++;
+						else
+						{
+							//for (int k = chess->position.x, p = chess->position.y; k != pos.x && p != pos.y; ((chess->position.x <= pos.x) ? ((chess->position.x == pos.x) ? k : k++) : k--),(((chess->position.y <= pos.y) ? (chess->position.y == pos.y) ? y : y++) : y--))
+						}
+					}
 				}
 			}
 		}

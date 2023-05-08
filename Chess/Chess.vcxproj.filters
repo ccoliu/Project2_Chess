@@ -51,4 +51,7 @@
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\Desktop\Chess.txt" />
+  </ItemGroup>
 </Project>
