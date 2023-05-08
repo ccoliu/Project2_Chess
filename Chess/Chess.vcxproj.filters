@@ -53,5 +53,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\Desktop\Chess.txt" />
+    <Text Include="test.txt" />
   </ItemGroup>
 </Project>
