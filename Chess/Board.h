@@ -13,9 +13,10 @@ class Board {
 private:
 	friend class ChessMan;
 	ChessMan::Color starting_color = ChessMan::Color::white;
+	bool win = false;
+	string winner = "";
 public:
 	ChessMan* board[8][8] = { nullptr };
-	Position blackKing, whiteKing;
 	Board()
 	{
 		for (int i = 0; i < 8; i++)
@@ -43,9 +44,6 @@ public:
 
 		board[0][4] = new King(ChessMan::Color::black, Position(0, 4));
 		board[7][4] = new King(ChessMan::Color::white, Position(7, 4));
-
-		blackKing = Position(0, 4);
-		whiteKing = Position(7, 4);
 	}
 	int isCheckmated(Position pos)
 	{	
@@ -118,19 +116,10 @@ public:
 			board[from.y][from.x] = nullptr;
 			if (to.y == 0 || to.y == 7 && typeid(*chess) == typeid(Pawn)) Promotion(to);
 			starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
-			if (typeid(*chess) == typeid(King))
+			if (win)
 			{
-				if (chess->getColor() == ChessMan::Color::white) whiteKing = to;
-				else blackKing = to;
-			}
-			if (getChess(whiteKing) == nullptr)
-			{
-				cout << "Black wins!" << endl;
-				exit(0);
-			}
-			else if (getChess(blackKing) == nullptr)
-			{
-				cout << "White wins!" << endl;
+				DrawBoard();
+				cout << winner << endl;
 				exit(0);
 			}
 		}
@@ -811,6 +800,18 @@ public:
 	ChessMan* EatChess(Position pos)
 	{
 		ChessMan* chess = getChess(pos);
+		if (typeid(*chess) == typeid(King))
+		{
+			win = true;
+			if (chess->getColor() == ChessMan::Color::white)
+			{
+				winner = "Black wins!";
+			}
+			else
+			{
+				winner = "White wins!";
+			}
+		}
 		board[pos.y][pos.x] = nullptr;
 		delete chess;
 		return nullptr;
