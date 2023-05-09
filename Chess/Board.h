@@ -116,7 +116,7 @@ public:
 			chess->position = to;
 			chess->step++;
 			board[from.y][from.x] = nullptr;
-			if (to.y == 0 || to.y == 7 && typeid(*chess) == typeid(Pawn)) Promotion(to);
+			if ((to.y == 0 || to.y == 7) && typeid(*chess) == typeid(Pawn)) Promotion(to);
 			starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
 			if (win)
 			{
@@ -323,24 +323,9 @@ public:
 		{
 			if (find(moves.begin(), moves.end(), to) == moves.end())
 			{
-				cout << "Invalid move: Move not available!" << endl;
-				return false;
-			}
-			else
-			{
-				int Checkmate = isCheckmated(to);
-				if (getChess(to) != nullptr && getChess(to)->getColor() != chess->color && Checkmate == 0)
+				if (to.y == from.y && abs(to.x - from.x) == 2) //Castling
 				{
-					EatChess(to);
-					return true;
-				}
-				else if (getChess(to) == nullptr && Checkmate == 0)
-				{
-					return true;
-				}
-				else if (to.y == from.y && abs(to.x - from.x) == 2) //Castling
-				{
-					if (getChess(to)->getStep() != 0)
+					if (getChess(from)->getStep() != 0)
 					{
 						cout << "Invalid move: Move not available!" << endl;
 						return false;
@@ -349,14 +334,15 @@ public:
 					ChessMan* rook = nullptr;
 					if (to.x < from.x)
 					{
-						for (int i = from.x - 1; i > 0; i--)
+						for (int i = from.x - 1; i >= 0; i--)
 						{
+							if (getChess(Position(to.y, i)) == nullptr) continue;
 							if (typeid(*getChess(Position(to.y, i))) == typeid(Rook))
 							{
 								hasRook = true;
 								rook = getChess(Position(to.y, i));
 							}
-							if (getChess(Position(to.y, i)) != nullptr)
+							else if (getChess(Position(to.y, i)) != nullptr)
 							{
 								cout << "Invalid move: Move not available!" << endl;
 								return false;
@@ -369,7 +355,7 @@ public:
 						}
 						else
 						{
-							if (rook->getStep() == 0 && Checkmate == 0)
+							if (rook->getStep() == 0 && isCheckmated(to) == 0)
 							{
 								Position rookPos = rook->position;
 								board[to.y][to.x + 1] = rook;
@@ -380,7 +366,7 @@ public:
 							}
 							else
 							{
-								if (Checkmate > 0)
+								if (isCheckmated(to) > 0)
 								{
 									cout << "Invalid move: Checkmate alert!" << endl;
 								}
@@ -414,7 +400,7 @@ public:
 						}
 						else
 						{
-							if (rook->getStep() == 0 && Checkmate == 0)
+							if (rook->getStep() == 0 && isCheckmated(to) == 0)
 							{
 								Position rookPos = rook->position;
 								board[to.y][to.x - 1] = rook;
@@ -425,7 +411,7 @@ public:
 							}
 							else
 							{
-								if (Checkmate > 0)
+								if (isCheckmated(to) > 0)
 								{
 									cout << "Invalid move: Checkmate alert!" << endl;
 								}
@@ -437,6 +423,24 @@ public:
 							}
 						}
 					}
+				}
+				else
+				{
+					cout << "Invalid move: Move not available!" << endl;
+					return false;
+				}
+			}
+			else
+			{
+				int Checkmate = isCheckmated(to);
+				if (getChess(to) != nullptr && getChess(to)->getColor() != chess->color && Checkmate == 0)
+				{
+					EatChess(to);
+					return true;
+				}
+				else if (getChess(to) == nullptr && Checkmate == 0)
+				{
+					return true;
 				}
 				else
 				{
