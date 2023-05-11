@@ -7,27 +7,6 @@ class Rook : public ChessMan
 {
 public:
 	//initialize the rook
-	Rook(Color col, Position position) : ChessMan(col, position)
-	{
-		if (col == Color::white)
-		{
-			this->icon = 'r';
-		}
-		else
-		{
-			this->icon = 'R';
-		}
-	};
-	vector<Position> Move(Position newPosition) override
-	{
-		vector<Position> accessable;
-		for (int i = 1; i < 8; i++)
-		{
-			accessable.push_back(Position(position.y + i, position.x));
-			accessable.push_back(Position(position.y - i, position.x));
-			accessable.push_back(Position(position.y, position.x + i));
-			accessable.push_back(Position(position.y, position.x - i));
-		}
-		return accessable;
-	}
+	Rook(Color col, Position position);
+	vector<Position> Move(Position newPosition) override;
 };
