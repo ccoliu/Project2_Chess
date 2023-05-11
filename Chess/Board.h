@@ -16,9 +16,12 @@ private:
 	bool win = false;
 	string winner = "";
 public:
+	ChessMan* previousboard[8][8] = { nullptr };
 	ChessMan* board[8][8] = { nullptr };
 	Board();
-	int isCheckmated(Position pos);
+	void saveCurrentBoard();
+	void gotoPreviousBoard();
+	int isCheckmated(ChessMan* board[8][8], Position pos);
 	bool checkTie();
 	void DrawBoard();
 	void initMove();
