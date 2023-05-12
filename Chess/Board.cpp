@@ -6,6 +6,8 @@ Board::Board()
 	{
 		board[1][i] = new Pawn(ChessMan::Color::black, Position(1, i));
 		board[6][i] = new Pawn(ChessMan::Color::white, Position(6, i));
+		board[1][i] = new Pawn(ChessMan::Color::black, Position(1, i));
+		board[6][i] = new Pawn(ChessMan::Color::white, Position(6, i));
 	}
 	board[0][1] = new Knight(ChessMan::Color::black, Position(0, 1));
 	board[0][6] = new Knight(ChessMan::Color::black, Position(0, 6));
@@ -70,26 +72,25 @@ int Board::isCheckmated(ChessMan* board[8][8], Position pos)
 	return count;
 }
 
-void Board::saveCurrentBoard()
-{
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			previousboard[i][j] = board[i][j];
-		}
-	}
-}
-
 void Board::gotoPreviousBoard()
 {
-	for (int i = 0; i < 8; i++)
+	int sz = log.size() - 1;
+	Position currentPos = log[sz].second;
+	Position lastPos = log[sz].first;
+	ChessMan* chess = getChess(currentPos);
+	board[lastPos.y][lastPos.x] = board[currentPos.y][currentPos.x];
+	board[currentPos.y][currentPos.x] = nullptr;
+	chess->position = lastPos;
+	chess->step--;
+	log.pop_back();
+	int sz2 = eatLog.size() - 1;
+	ChessMan* eatenChess = eatLog[sz].first;
+	if (eatenChess != nullptr)
 	{
-		for (int j = 0; j < 8; j++)
-		{
-			board[i][j] = previousboard[i][j];
-		}
+		Position lastEatPos = eatLog[sz].second;
+		board[lastEatPos.y][lastEatPos.x] = eatenChess;
 	}
+	eatLog.pop_back();
 }
 
 bool Board::checkTie()
@@ -225,13 +226,34 @@ void Board::initMove()
 {
 	cout << "It's" << (starting_color == ChessMan::Color::white ? " white's " : " black's ") << "turn!" << endl;
 	cout << "Please input position that the chess you want to move and destination (Ex: d2 d4)" << endl;
+	cout << "input \"redo\" to go back to last step." << endl;
+	string s;
+	getline(cin, s);
+	if (s == "redo")
+	{
+		if (log.size() == 0)
+		{
+			cout << "No step to redo!" << endl;
+			return;
+		}
+		gotoPreviousBoard();
+		starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+		return;
+	}
+	if (s.length() < 5)
+	{
+		cout << "Error: Input Invalid" << endl;
+		return;
+	}
 	char x1, x2;
 	int y1, y2;
-	cin >> x1 >> y1 >> x2 >> y2;
+	x1 = s[0];
+	y1 = s[1] - '0';
+	x2 = s[3];
+	y2 = s[4] - '0';
 	Position from(8 - y1, (x1 - 'a')), to(8 - y2, (x2 - 'a'));
 	if (MoveChess(from, to) == true)
 	{
-		saveCurrentBoard();
 		ChessMan* chess = board[from.y][from.x];
 		board[to.y][to.x] = chess;
 		chess->position = to;
@@ -244,6 +266,12 @@ void Board::initMove()
 		}
 		else
 		{
+			log.push_back(make_pair(from, to));
+			if (hasEat == false)
+			{
+				eatLog.push_back(make_pair(nullptr, Position(-1, -1)));
+			}
+			hasEat = false;
 			starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
 		}
 		if (checkTie())
@@ -599,9 +627,11 @@ bool Board::MoveChess(Position from, Position to)
 	}
 }
 
-ChessMan* Board::EatChess(Position pos)
+void Board::EatChess(Position pos)
 {
 	ChessMan* chess = getChess(pos);
+	eatLog.push_back(make_pair(chess, pos));
+	hasEat = true;
 	if (typeid(*chess) == typeid(King))
 	{
 		win = true;
@@ -615,8 +645,6 @@ ChessMan* Board::EatChess(Position pos)
 		}
 	}
 	board[pos.y][pos.x] = nullptr;
-	delete chess;
-	return nullptr;
 }
 
 void Board::Promotion(Position pos)
