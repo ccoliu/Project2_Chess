@@ -215,6 +215,10 @@ void Board::DrawBoard()
 				cout << chess->getIcon() << " ";
 			}
 			else cout << ". ";
+			if (chess != nullptr && typeid(*chess) == typeid(King) && chess->getColor() == starting_color)
+			{
+				kingPos = Position(i, j);
+			}
 		}
 		cout << endl;
 	}
@@ -260,19 +264,17 @@ void Board::initMove()
 		chess->step++;
 		board[from.y][from.x] = nullptr;
 		if ((to.y == 0 || to.y == 7) && typeid(*chess) == typeid(Pawn)) Promotion(to);
-		if (isCheckmated(board, to) != 0 && isCheckmated(previousboard, to) == 0)
+		log.push_back(make_pair(from, to));
+		if (hasEat == false)
 		{
-			gotoPreviousBoard();
+			eatLog.push_back(make_pair(nullptr, Position(-1, -1)));
 		}
-		else
+		hasEat = false;
+		starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+		if (isCheckmated(board, kingPos) != 0)
 		{
-			log.push_back(make_pair(from, to));
-			if (hasEat == false)
-			{
-				eatLog.push_back(make_pair(nullptr, Position(-1, -1)));
-			}
-			hasEat = false;
-			starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+			cout << "Invalid move: Checkmate alert!" << endl;
+			gotoPreviousBoard();
 		}
 		if (checkTie())
 		{

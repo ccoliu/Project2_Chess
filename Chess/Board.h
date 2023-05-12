@@ -17,10 +17,10 @@ private:
 	bool win = false;
 	bool hasEat = false;
 	string winner = "";
+	Position kingPos;
 public:
 	vector<pair<Position,Position>> log;
 	vector<pair<ChessMan*, Position>> eatLog;
-	ChessMan* previousboard[8][8] = { nullptr };
 	ChessMan* board[8][8] = { nullptr };
 	Board();
 	void gotoPreviousBoard();
