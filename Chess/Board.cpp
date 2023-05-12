@@ -29,6 +29,7 @@ Board::Board()
 
 	board[0][4] = new King(ChessMan::Color::black, Position(0, 4));
 	board[7][4] = new King(ChessMan::Color::white, Position(7, 4));
+
 }
 
 int Board::isCheckmated(ChessMan* board[8][8], Position pos)
@@ -230,19 +231,43 @@ void Board::initMove()
 {
 	cout << "It's" << (starting_color == ChessMan::Color::white ? " white's " : " black's ") << "turn!" << endl;
 	cout << "Please input position that the chess you want to move and destination (Ex: d2 d4)" << endl;
-	cout << "input \"redo\" to go back to last step." << endl;
+	cout << "input \"menu\" to open up menu." << endl;
 	string s;
 	getline(cin, s);
-	if (s == "redo")
+	if (s == "menu")
 	{
-		if (log.size() == 0)
+		cout << "Please select your choice:" << endl;
+		cout << "(1) Resign" << endl;
+		cout << "(2) Redo" << endl;
+		cout << "(3) Exit" << endl;
+		int choice;
+		cin >> choice;
+		cin.ignore();
+		if (choice == 3) return;
+		if (choice == 2)
 		{
-			cout << "No step to redo!" << endl;
+			if (log.size() == 0)
+			{
+				cout << "No step to redo!" << endl;
+				return;
+			}
+			gotoPreviousBoard();
+			starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
 			return;
 		}
-		gotoPreviousBoard();
-		starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
-		return;
+		if (choice == 1)
+		{
+			if (starting_color == ChessMan::Color::white)
+			{
+				cout << "White resigned, Black wins!" << endl;
+				exit(0);
+			}
+			else
+			{
+				cout << "Black resigned, White wins!" << endl;
+				exit(0);
+			}
+		}
 	}
 	if (s.length() < 5)
 	{

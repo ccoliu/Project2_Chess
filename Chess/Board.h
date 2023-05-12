@@ -13,12 +13,12 @@ using namespace std;
 class Board {
 private:
 	friend class ChessMan;
-	ChessMan::Color starting_color = ChessMan::Color::white;
 	bool win = false;
 	bool hasEat = false;
 	string winner = "";
 	Position kingPos;
 public:
+	ChessMan::Color starting_color;
 	vector<pair<Position,Position>> log;
 	vector<pair<ChessMan*, Position>> eatLog;
 	ChessMan* board[8][8] = { nullptr };
