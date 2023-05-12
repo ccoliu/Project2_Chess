@@ -274,6 +274,10 @@ void Board::initMove()
 		cout << "Error: Input Invalid" << endl;
 		return;
 	}
+	if (isCheckmated(board, kingPos) != 0)
+	{
+		cout << "Warning: Checkmate alert." << endl;
+	}
 	char x1, x2;
 	int y1, y2;
 	x1 = s[0];
