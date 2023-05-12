@@ -205,7 +205,7 @@ void Board::DrawBoard()
 {
 	for (int i = 0; i < 8; i++)
 	{
-		cout << i << " ";
+		cout << 8 - i << " |";
 		for (int j = 0; j < 8; j++)
 		{
 			ChessMan* chess = getChess(Position(i, j));
@@ -217,15 +217,18 @@ void Board::DrawBoard()
 		}
 		cout << endl;
 	}
-	cout << "  0 1 2 3 4 5 6 7" << endl;
+	cout << "  �ССССССС�" << endl;
+	cout << "   a b c d e f g h" << endl;
 }
 
 void Board::initMove()
 {
 	cout << "It's" << (starting_color == ChessMan::Color::white ? " white's " : " black's ") << "turn!" << endl;
-	int x1, y1, x2, y2;
-	cin >> y1 >> x1 >> y2 >> x2;
-	Position from(y1, x1), to(y2, x2);
+	cout << "Please input position that the chess you want to move and destination (Ex: d2 d4)" << endl;
+	char x1, x2;
+	int y1, y2;
+	cin >> x1 >> y1 >> x2 >> y2;
+	Position from(8 - y1, (x1 - 'a')), to(8 - y2, (x2 - 'a'));
 	if (MoveChess(from, to) == true)
 	{
 		saveCurrentBoard();
