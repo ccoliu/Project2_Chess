@@ -277,7 +277,7 @@ void Board::initMove()
 			return;
 		}
 		starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
-		if (checkTie())
+		if (win == false && checkTie())
 		{
 			DrawBoard();
 			cout << "Tie!" << endl;
