@@ -1,7 +1,14 @@
+//File : Board.cpp
+//Name : ¼B¥[¦¨ ¤ý¬Rµ¾ §fª@®p ³¯©|«h
+//First Update:2023/5/3
+//Last Update:2023/5/12
+//Description:Chess
+
 #include "Board.h"
 
 Board::Board()
 {
+	//initiialize the pawn position
 	for (int i = 0; i < 8; i++)
 	{
 		board[1][i] = new Pawn(ChessMan::Color::black, Position(1, i));
@@ -9,24 +16,25 @@ Board::Board()
 		board[1][i] = new Pawn(ChessMan::Color::black, Position(1, i));
 		board[6][i] = new Pawn(ChessMan::Color::white, Position(6, i));
 	}
+	//initiialize the Knight position
 	board[0][1] = new Knight(ChessMan::Color::black, Position(0, 1));
 	board[0][6] = new Knight(ChessMan::Color::black, Position(0, 6));
 	board[7][1] = new Knight(ChessMan::Color::white, Position(7, 1));
 	board[7][6] = new Knight(ChessMan::Color::white, Position(7, 6));
-
+	//initiialize the Rook position
 	board[0][0] = new Rook(ChessMan::Color::black, Position(0, 0));
 	board[0][7] = new Rook(ChessMan::Color::black, Position(0, 7));
 	board[7][0] = new Rook(ChessMan::Color::white, Position(7, 0));
 	board[7][7] = new Rook(ChessMan::Color::white, Position(7, 7));
-
+	//initiialize the Bishop position
 	board[0][2] = new Bishop(ChessMan::Color::black, Position(0, 2));
 	board[0][5] = new Bishop(ChessMan::Color::black, Position(0, 5));
 	board[7][2] = new Bishop(ChessMan::Color::white, Position(7, 2));
 	board[7][5] = new Bishop(ChessMan::Color::white, Position(7, 5));
-
+	//initiialize the Queen position
 	board[0][3] = new Queen(ChessMan::Color::black, Position(0, 3));
 	board[7][3] = new Queen(ChessMan::Color::white, Position(7, 3));
-
+	//initiialize the King position
 	board[0][4] = new King(ChessMan::Color::black, Position(0, 4));
 	board[7][4] = new King(ChessMan::Color::white, Position(7, 4));
 
@@ -72,7 +80,7 @@ int Board::isCheckmated(ChessMan* board[8][8], Position pos)
 	}
 	return count;
 }
-
+//go back to last step
 void Board::gotoPreviousBoard()
 {
 	int sz = log.size() - 1;
@@ -93,11 +101,12 @@ void Board::gotoPreviousBoard()
 	}
 	eatLog.pop_back();
 }
-
+//check whether Tie
 bool Board::checkTie()
 {
 	vector<ChessMan*> chesses;
 	Position king_pos;
+	//check every position
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
@@ -137,6 +146,7 @@ bool Board::checkTie()
 				if (getChess(Position(pos.x + 1, pos.y)) != nullptr && typeid(*getChess(Position(pos.x + 1, pos.y))) == typeid(Pawn) && getChess(Position(pos.x + 1, pos.y))->getColor() != chess->getColor() && getChess(Position(pos.x + 1, pos.y))->getStep() == 1) return false;
 			}
 		}
+		//check whether rook can move
 		if (typeid(*chess) == typeid(Rook))
 		{
 			Position pos = chess->position;
@@ -145,6 +155,7 @@ bool Board::checkTie()
 			if (pos.y - 1 >= 0 && (getChess(Position(pos.x, pos.y - 1)) == nullptr || (getChess(Position(pos.x, pos.y - 1)) != nullptr && getChess(Position(pos.x, pos.y - 1))->getColor() != chess->getColor()))) return false;
 			if (pos.y + 1 < 8 && (getChess(Position(pos.x, pos.y + 1)) == nullptr || (getChess(Position(pos.x, pos.y + 1)) != nullptr && getChess(Position(pos.x, pos.y + 1))->getColor() != chess->getColor()))) return false;
 		}
+		//check whether Bishop can move
 		if (typeid(*chess) == typeid(Bishop))
 		{
 			Position pos = chess->position;
@@ -153,6 +164,7 @@ bool Board::checkTie()
 			if (pos.x + 1 < 8 && pos.y - 1 >= 0 && (getChess(Position(pos.x + 1, pos.y - 1)) == nullptr || (getChess(Position(pos.x + 1, pos.y - 1)) != nullptr && getChess(Position(pos.x + 1, pos.y - 1))->getColor() != chess->getColor()))) return false;
 			if (pos.x + 1 < 8 && pos.y + 1 < 8 && (getChess(Position(pos.x + 1, pos.y + 1)) == nullptr || (getChess(Position(pos.x + 1, pos.y + 1)) != nullptr && getChess(Position(pos.x + 1, pos.y + 1))->getColor() != chess->getColor()))) return false;
 		}
+		//check whether Queen can move
 		if (typeid(*chess) == typeid(Queen))
 		{
 			Position pos = chess->position;
@@ -165,6 +177,7 @@ bool Board::checkTie()
 			if (pos.x + 1 < 8 && pos.y - 1 >= 0 && (getChess(Position(pos.x + 1, pos.y - 1)) == nullptr || (getChess(Position(pos.x + 1, pos.y - 1)) != nullptr && getChess(Position(pos.x + 1, pos.y - 1))->getColor() != chess->getColor()))) return false;
 			if (pos.x + 1 < 8 && pos.y + 1 < 8 && (getChess(Position(pos.x + 1, pos.y + 1)) == nullptr || (getChess(Position(pos.x + 1, pos.y + 1)) != nullptr && getChess(Position(pos.x + 1, pos.y + 1))->getColor() != chess->getColor()))) return false;
 		}
+		//check whether King can move
 		if (typeid(*chess) == typeid(King))
 		{
 			Position pos = chess->position;
@@ -188,6 +201,7 @@ bool Board::checkTie()
 			}
 		}
 	}
+	//if no tie judge who win
 	if (isCheckmated(board,Position(king_pos.y, king_pos.x)) != 0)
 	{
 		win = true;
@@ -202,7 +216,7 @@ bool Board::checkTie()
 	}
 	return true;
 }
-
+//draw the board
 void Board::DrawBoard()
 {
 	for (int i = 0; i < 8; i++)
@@ -233,7 +247,9 @@ void Board::initMove()
 	cout << "Please input position that the chess you want to move and destination (Ex: d2 d4)" << endl;
 	cout << "input \"menu\" to open up menu." << endl;
 	string s;
+	//get the instruction
 	getline(cin, s);
+	//open menu
 	if (s == "menu")
 	{
 		cout << "Please select your choice:" << endl;
@@ -285,6 +301,7 @@ void Board::initMove()
 	x2 = s[3];
 	y2 = s[4] - '0';
 	Position from(8 - y1, (x1 - 'a')), to(8 - y2, (x2 - 'a'));
+	//If valid then move
 	if (MoveChess(from, to) == true)
 	{
 		ChessMan* chess = board[from.y][from.x];
@@ -306,12 +323,14 @@ void Board::initMove()
 			return;
 		}
 		starting_color = starting_color == ChessMan::Color::white ? ChessMan::Color::black : ChessMan::Color::white;
+		//The game have Tie
 		if (win == false && checkTie())
 		{
 			DrawBoard();
 			cout << "Tie!" << endl;
 			exit(0);
 		}
+		//win the game
 		if (win)
 		{
 			DrawBoard();
@@ -321,12 +340,12 @@ void Board::initMove()
 	}
 	return;
 }
-
+//get the position's chess
 ChessMan* Board::getChess(Position position)
 {
 	return board[position.y][position.x];
 }
-
+//check whether can move if Yes then move or dont move
 bool Board::MoveChess(Position from, Position to)
 {
 	if (from.x < 0 || from.x > 7 || from.y < 0 || from.y > 7 || to.x < 0 || to.x > 7 || to.y < 0 || to.y > 7)
@@ -334,12 +353,14 @@ bool Board::MoveChess(Position from, Position to)
 		cout << "Invalid move: out of range!" << endl;
 		return false;
 	}
+	//if new position equal to current positon then Invalid position
 	if (from == to)
 	{
 		cout << "Invalid move: same position!" << endl;
 		return false;
 	}
 	ChessMan* chess = board[from.y][from.x];
+	
 	if (chess == nullptr || chess->getColor() != starting_color)
 	{
 		if (chess == nullptr) cout << "nullptr ";
@@ -347,8 +368,10 @@ bool Board::MoveChess(Position from, Position to)
 		return false;
 	}
 	vector<Position> moves = chess->Move(to);
+	//Pawn  move
 	if (typeid(*chess) == typeid(Pawn))
 	{
+		//wrong position
 		if (find(moves.begin(), moves.end(), to) == moves.end())
 		{
 			cout << "Invalid move: Move not available!" << endl;
@@ -358,16 +381,19 @@ bool Board::MoveChess(Position from, Position to)
 		{
 			if (to.x - from.x != 0 && to.y - from.y != 0)
 			{
+				//call eatchess 
 				if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 				{
 					EatChess(to);
 					return true;
 				}
+				//En passant
 				else if (getChess(Position(from.y, from.x - 1)) != nullptr && typeid(*getChess(Position(from.y, from.x - 1))) == typeid(Pawn) && getChess(Position(from.y, from.x - 1))->getColor() != chess->getColor() && getChess(Position(from.y, from.x - 1))->getStep() == 1 && (from.y == 3 || from.y == 4))
 				{
 					EatChess(Position(from.y, from.x - 1));
 					return true;
 				}
+				//En passant
 				else if (getChess(Position(from.y, from.x + 1)) != nullptr && typeid(*getChess(Position(from.y, from.x + 1))) == typeid(Pawn) && getChess(Position(from.y, from.x + 1))->getColor() != chess->getColor() && getChess(Position(from.y, from.x + 1))->getStep() == 1 && (from.y == 3 || from.y == 4))
 				{
 					EatChess(Position(from.y, from.x + 1));
@@ -390,6 +416,7 @@ bool Board::MoveChess(Position from, Position to)
 			}
 		}
 	}
+	//knight move
 	else if (typeid(*chess) == typeid(Knight))
 	{
 		if (find(moves.begin(), moves.end(), to) == moves.end())
@@ -399,11 +426,13 @@ bool Board::MoveChess(Position from, Position to)
 		}
 		else
 		{
+			//eatchess
 			if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 			{
 				EatChess(to);
 				return true;
 			}
+			//move
 			else if (getChess(to) == nullptr)
 			{
 				return true;
@@ -415,6 +444,7 @@ bool Board::MoveChess(Position from, Position to)
 			}
 		}
 	}
+	//Rook move
 	else if (typeid(*chess) == typeid(Rook))
 	{
 		if (find(moves.begin(), moves.end(), to) == moves.end())
@@ -434,6 +464,7 @@ bool Board::MoveChess(Position from, Position to)
 					return false;
 				}
 			}
+			//call eat chess
 			if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 			{
 				EatChess(to);
@@ -450,6 +481,7 @@ bool Board::MoveChess(Position from, Position to)
 			}
 		}
 	}
+	//Bishop move
 	else if (typeid(*chess) == typeid(Bishop))
 	{
 		if (find(moves.begin(), moves.end(), to) == moves.end())
@@ -469,6 +501,7 @@ bool Board::MoveChess(Position from, Position to)
 					return false;
 				}
 			}
+			//call eat chess
 			if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 			{
 				EatChess(to);
@@ -485,6 +518,7 @@ bool Board::MoveChess(Position from, Position to)
 			}
 		}
 	}
+	//Queen move
 	else if (typeid(*chess) == typeid(Queen))
 	{
 		if (find(moves.begin(), moves.end(), to) == moves.end())
@@ -504,6 +538,7 @@ bool Board::MoveChess(Position from, Position to)
 					return false;
 				}
 			}
+			//call eat chess
 			if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
 			{
 				EatChess(to);
@@ -520,6 +555,7 @@ bool Board::MoveChess(Position from, Position to)
 			}
 		}
 	}
+	//King move 
 	else if (typeid(*chess) == typeid(King))
 	{
 		if (find(moves.begin(), moves.end(), to) == moves.end())
@@ -549,6 +585,7 @@ bool Board::MoveChess(Position from, Position to)
 							return false;
 						}
 					}
+					//no rook cannot castling
 					if (!hasRook)
 					{
 						cout << "Invalid move: No rook for castling!" << endl;
@@ -594,6 +631,7 @@ bool Board::MoveChess(Position from, Position to)
 							return false;
 						}
 					}
+					//no rook cannnot castling
 					if (!hasRook)
 					{
 						cout << "Invalid move: No rook for castling!" << endl;
@@ -645,6 +683,7 @@ bool Board::MoveChess(Position from, Position to)
 			}
 			else
 			{
+				//King cannot suicide
 				if (Checkmate > 0)
 				{
 					cout << "Invalid move: Checkmate alert!" << endl;
@@ -658,12 +697,13 @@ bool Board::MoveChess(Position from, Position to)
 		}
 	}
 }
-
+//Eat chess
 void Board::EatChess(Position pos)
 {
 	ChessMan* chess = getChess(pos);
 	eatLog.push_back(make_pair(chess, pos));
 	hasEat = true;
+	//if King be eat the game over
 	if (typeid(*chess) == typeid(King))
 	{
 		win = true;
@@ -678,7 +718,7 @@ void Board::EatChess(Position pos)
 	}
 	board[pos.y][pos.x] = nullptr;
 }
-
+//Pawn promotion
 void Board::Promotion(Position pos)
 {
 	cout << "Enter the type of chess you want to promote to: " << endl;

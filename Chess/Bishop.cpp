@@ -1,5 +1,12 @@
+//File : Bishop.cpp
+//Name : ¼B¥[¦¨ ¤ý¬Rµ¾ §fª@®p ³¯©|«h
+//First Update:2023/5/3
+//Last Update:2023/5/12
+//Description:Chess
+
 #include "Bishop.h"
 
+//Bishop constructure
 Bishop::Bishop(Color col, Position position) : ChessMan(col, position)
 {
 	if (col == Color::white)
@@ -11,6 +18,7 @@ Bishop::Bishop(Color col, Position position) : ChessMan(col, position)
 		this->icon = 'B';
 	}
 };
+//return the Bishop valid move
 vector<Position> Bishop::Move(Position newPosition)
 {
 	vector<Position> accessable;
