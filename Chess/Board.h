@@ -28,6 +28,7 @@ public:
 	ChessMan::Color starting_color;
 	vector<pair<Position,Position>> log;
 	vector<pair<ChessMan*, Position>> eatLog;
+	vector<ChessMan*> seq;
 	ChessMan* board[8][8] = { nullptr };
 	Board();
 	void gotoPreviousBoard();

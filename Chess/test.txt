@@ -62,3 +62,14 @@ c8 d7
 b3 b5
 c3 d5
 e8 c8
+
+b2 b4
+c7 c5
+b4 c5
+d7 d5
+c8 f5
+c5 c6
+c8 f5
+c6 c7
+d5 d4
+c7 c8

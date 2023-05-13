@@ -69,7 +69,6 @@ int Board::isCheckmated(ChessMan* board[8][8], Position pos)
 						else p = i - 1;
 						for (k, p; k != pos.x || p != pos.y; ((chess->position.x <= pos.x) ? ((chess->position.x == pos.x) ? k : k++) : k--), ((chess->position.y <= pos.y) ? ((chess->position.y == pos.y) ? p : p++) : p--))
 						{
-							cout << k << " " << p << endl;
 							if (getChess(Position(p, k)) != nullptr)
 							{
 								isBlocked = true;
@@ -95,7 +94,16 @@ void Board::gotoPreviousBoard()
 	board[currentPos.y][currentPos.x] = nullptr;
 	chess->position = lastPos;
 	chess->step--;
-	if (typeid(*chess) == typeid(King) && abs(lastPos.x - currentPos.x) == 2)
+	if (typeid(*seq[sz-1]) != typeid(*chess) && typeid(*seq[sz-1]) == typeid(Pawn))
+	{
+		ChessMan::Color color = chess->getColor();
+		int st = chess->getStep();
+		delete chess;
+		board[lastPos.y][lastPos.x] = nullptr;
+		board[lastPos.y][lastPos.x] = new Pawn(color, lastPos);
+		board[lastPos.y][lastPos.x]->step = st;
+	}
+	else if (typeid(*chess) == typeid(King) && abs(lastPos.x - currentPos.x) == 2)
 	{
 		if (chess->getColor() == ChessMan::Color::black)
 		{
@@ -141,6 +149,7 @@ void Board::gotoPreviousBoard()
 		board[lastEatPos.y][lastEatPos.x] = eatenChess;
 	}
 	eatLog.pop_back();
+	seq.pop_back();
 }
 
 Position Board::getKingPos()
@@ -359,6 +368,7 @@ void Board::initMove()
 			eatLog.push_back(make_pair(nullptr, Position(-1, -1)));
 		}
 		hasEat = false;
+		seq.push_back(getChess(to));
 		if (isCheckmated(board, kingPos) != 0)
 		{
 			cout << "Invalid move: Checkmate alert!" << endl;
@@ -759,23 +769,29 @@ void Board::Promotion(Position pos)
 	int choice;
 retry:
 	cin >> choice;
+	cin.ignore();
 	ChessMan* chess = getChess(pos);
 	ChessMan::Color color = chess->getColor();
+	int st = chess->getStep();
 	delete chess;
 	board[pos.y][pos.x] = nullptr;
 	switch (choice)
 	{
 	case 1:
 		board[pos.y][pos.x] = new Queen(color, pos);
+		board[pos.y][pos.x]->step = st;
 		break;
 	case 2:
 		board[pos.y][pos.x] = new Rook(color, pos);
+		board[pos.y][pos.x]->step = st;
 		break;
 	case 3:
 		board[pos.y][pos.x] = new Bishop(color, pos);
+		board[pos.y][pos.x]->step = st;
 		break;
 	case 4:
 		board[pos.y][pos.x] = new Knight(color, pos);
+		board[pos.y][pos.x]->step = st;
 		break;
 	default:
 		cout << "Invalid choice!" << endl;
