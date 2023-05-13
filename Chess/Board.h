@@ -15,7 +15,6 @@
 #include "Bishop.h"
 #include "Queen.h"
 #include "King.h"
-#include "ChessTimer.h"
 using namespace std;
 
 class Board {
@@ -25,8 +24,6 @@ private:
 	bool hasEat = false;
 	string winner = "";
 	Position kingPos;
-	ChessTimer whiteTimer = ChessTimer(10);
-	ChessTimer blackTimer = ChessTimer(10);
 public:
 	ChessMan::Color starting_color;
 	vector<pair<Position,Position>> log;
