@@ -165,7 +165,7 @@ void Board::gotoPreviousBoard()
 Position Board::getKingPos()
 {
 	Position king_pos;
-	for (int i = 0; i < 8; i++) 
+	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
 		{
@@ -647,7 +647,7 @@ bool Board::MoveChess(Position from, Position to)
 		if (find(moves.begin(), moves.end(), to) == moves.end())
 		{
 			//check two side of castling
-			if (to.y == from.y && abs(to.x - from.x) == 2) 
+			if (to.y == from.y && abs(to.x - from.x) == 2)
 			{
 				if (getChess(from)->getStep() != 0)
 				{
@@ -680,7 +680,7 @@ bool Board::MoveChess(Position from, Position to)
 					}
 					else
 					{
-						if (rook->getStep() == 0 && isCheckmated(board,to) == 0)
+						if (rook->getStep() == 0 && isCheckmated(board, to) == 0)
 						{
 							Position rookPos = rook->position;
 							board[to.y][to.x + 1] = rook;
@@ -691,7 +691,7 @@ bool Board::MoveChess(Position from, Position to)
 						}
 						else
 						{
-							if (isCheckmated(board,to) > 0)
+							if (isCheckmated(board, to) > 0)
 							{
 								cout << "Invalid move: Checkmate alert!" << endl;
 							}
@@ -725,9 +725,9 @@ bool Board::MoveChess(Position from, Position to)
 						return false;
 					}
 					else
-					//castling
+						//castling
 					{
-						if (rook->getStep() == 0 && isCheckmated(board,to) == 0)
+						if (rook->getStep() == 0 && isCheckmated(board, to) == 0)
 						{
 							Position rookPos = rook->position;
 							board[to.y][to.x - 1] = rook;
@@ -739,7 +739,7 @@ bool Board::MoveChess(Position from, Position to)
 						else
 						{
 							//if checkmate print alert
-							if (isCheckmated(board,to) > 0)
+							if (isCheckmated(board, to) > 0)
 							{
 								cout << "Invalid move: Checkmate alert!" << endl;
 							}
@@ -761,7 +761,7 @@ bool Board::MoveChess(Position from, Position to)
 		}
 		else
 		{
-			int Checkmate = isCheckmated(board,to);
+			int Checkmate = isCheckmated(board, to);
 			//if no checkmate and different chess then eatchess
 			if (getChess(to) != nullptr && getChess(to)->getColor() != chess->color && Checkmate == 0)
 			{
