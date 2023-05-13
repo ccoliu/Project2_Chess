@@ -485,11 +485,7 @@ bool Board::MoveChess(Position from, Position to)
 					return false;
 				}
 			}
-			else if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
-			{
-				EatChess(to);
-				return true;
-			}
+			//can move to ahead
 			else if (getChess(to) == nullptr)
 			{
 				return true;
