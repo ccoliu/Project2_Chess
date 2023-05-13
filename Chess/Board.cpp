@@ -1,5 +1,5 @@
 //File : Board.cpp
-//Name : ¼B¥[¦¨ ¤ı¬Rµ¾ §fª@®p ³¯©|«h
+//Name : åŠ‰åŠ æˆ ç‹æ˜±ç¿” å‘‚æ˜‡å³° é™³å°šå‰‡
 //First Update:2023/5/3
 //Last Update:2023/5/12
 //Description:Chess
@@ -311,7 +311,7 @@ void Board::DrawBoard()
 		}
 		cout << endl;
 	}
-	cout << "  ¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ¡Ğ" << endl;
+	cout << "  ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼" << endl;
 	cout << "   a b c d e f g h" << endl;
 }
 
