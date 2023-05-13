@@ -53,10 +53,23 @@ int Board::isCheckmated(ChessMan* board[8][8], Position pos)
 					else
 					{
 						bool isBlocked = false;
-						int k = ((chess->position.x <= pos.x) ? ((chess->position.x == pos.x ? chess->position.x : chess->position.x + 1)) : chess->position.x - 1);
-						int p = ((chess->position.y <= pos.y) ? ((chess->position.y == pos.y ? chess->position.y : chess->position.y + 1)) : chess->position.y - 1);
-						for (k, p; k != pos.x && p != pos.y; ((chess->position.x <= pos.x) ? ((chess->position.x == pos.x) ? k : k++) : k--), ((chess->position.y <= pos.y) ? ((chess->position.y == pos.y) ? p : p++) : p--))
+						int k = 0;
+						int p = 0;
+						if (j <= pos.x)
 						{
+							if (j == pos.x) k = j;
+							else k = j + 1;
+						}
+						else k = j - 1;
+						if (i <= pos.y)
+						{
+							if (i == pos.y) p = i;
+							else p = i + 1;
+						}
+						else p = i - 1;
+						for (k, p; k != pos.x || p != pos.y; ((chess->position.x <= pos.x) ? ((chess->position.x == pos.x) ? k : k++) : k--), ((chess->position.y <= pos.y) ? ((chess->position.y == pos.y) ? p : p++) : p--))
+						{
+							cout << k << " " << p << endl;
 							if (getChess(Position(p, k)) != nullptr)
 							{
 								isBlocked = true;
@@ -82,6 +95,43 @@ void Board::gotoPreviousBoard()
 	board[currentPos.y][currentPos.x] = nullptr;
 	chess->position = lastPos;
 	chess->step--;
+	if (typeid(*chess) == typeid(King) && abs(lastPos.x - currentPos.x) == 2)
+	{
+		if (chess->getColor() == ChessMan::Color::black)
+		{
+			if (lastPos.x > currentPos.x) // go left
+			{
+				board[0][0] = board[chess->position.y][chess->position.x - 1];
+				board[chess->position.y][chess->position.x - 1] = nullptr;
+				board[0][0]->position = Position(0, 0);
+				board[0][0]->step = 0;
+			}
+			else // lastPos.x < currentPos.x
+			{
+				board[0][7] = board[chess->position.y][chess->position.x + 1];
+				board[chess->position.y][chess->position.x + 1] = nullptr;
+				board[0][7]->position = Position(0, 7);
+				board[0][7]->step = 0;
+			}
+		}
+		else
+		{
+			if (lastPos.x > currentPos.x) // go left
+			{
+				board[7][0] = board[chess->position.y][chess->position.x - 1];
+				board[chess->position.y][chess->position.x - 1] = nullptr;
+				board[7][0]->position = Position(7, 0);
+				board[7][0]->step = 0;
+			}
+			else // lastPos.x < currentPos.x
+			{
+				board[7][7] = board[chess->position.y][chess->position.x + 1];
+				board[chess->position.y][chess->position.x + 1] = nullptr;
+				board[7][7]->position = Position(7, 7);
+				board[7][7]->step = 0;
+			}
+		}
+	}
 	log.pop_back();
 	int sz2 = eatLog.size() - 1;
 	ChessMan* eatenChess = eatLog[sz].first;
@@ -287,10 +337,6 @@ void Board::initMove()
 		return;
 	}
 	kingPos = getKingPos();
-	if (isCheckmated(board, kingPos) != 0)
-	{
-		cout << "Warning: Checkmate alert." << endl;
-	}
 	char x1, x2;
 	int y1, y2;
 	x1 = s[0];
@@ -306,6 +352,7 @@ void Board::initMove()
 		chess->step++;
 		board[from.y][from.x] = nullptr;
 		if ((to.y == 0 || to.y == 7) && typeid(*chess) == typeid(Pawn)) Promotion(to);
+		kingPos = getKingPos();
 		log.push_back(make_pair(from, to));
 		if (hasEat == false)
 		{
@@ -330,6 +377,11 @@ void Board::initMove()
 			DrawBoard();
 			cout << winner << endl;
 			exit(0);
+		}
+		kingPos = getKingPos();
+		if (isCheckmated(board, kingPos) > 0)
+		{
+			cout << "Warning: Checkmate alert." << endl;
 		}
 	}
 	return;
@@ -392,6 +444,11 @@ bool Board::MoveChess(Position from, Position to)
 					return false;
 				}
 			}
+			else if (getChess(to) != nullptr && getChess(to)->getColor() != chess->getColor())
+			{
+				EatChess(to);
+				return true;
+			}
 			else if (getChess(to) == nullptr)
 			{
 				return true;
@@ -439,7 +496,7 @@ bool Board::MoveChess(Position from, Position to)
 		{
 			int k = ((from.x <= to.x) ? ((from.x == to.x ? from.x : from.x + 1)) : from.x - 1);
 			int p = ((from.y <= to.y) ? ((from.y == to.y ? from.y : from.y + 1)) : from.y - 1);
-			for (k, p; k != to.x && p != to.y; ((from.x <= to.x) ? ((from.x == to.x) ? k : k++) : k--), ((from.y <= to.y) ? ((from.y == to.y) ? p : p++) : p--))
+			for (k, p; k != to.x || p != to.y; ((from.x <= to.x) ? ((from.x == to.x) ? k : k++) : k--), ((from.y <= to.y) ? ((from.y == to.y) ? p : p++) : p--))
 			{
 				if (getChess(Position(p, k)) != nullptr)
 				{
@@ -474,7 +531,7 @@ bool Board::MoveChess(Position from, Position to)
 		{
 			int k = ((from.x <= to.x) ? ((from.x == to.x ? from.x : from.x + 1)) : from.x - 1);
 			int p = ((from.y <= to.y) ? ((from.y == to.y ? from.y : from.y + 1)) : from.y - 1);
-			for (k, p; k != to.x && p != to.y; ((from.x <= to.x) ? ((from.x == to.x) ? k : k++) : k--), ((from.y <= to.y) ? ((from.y == to.y) ? p : p++) : p--))
+			for (k, p; k != to.x || p != to.y; ((from.x <= to.x) ? ((from.x == to.x) ? k : k++) : k--), ((from.y <= to.y) ? ((from.y == to.y) ? p : p++) : p--))
 			{
 				if (getChess(Position(p, k)) != nullptr)
 				{
@@ -509,7 +566,7 @@ bool Board::MoveChess(Position from, Position to)
 		{
 			int k = ((from.x <= to.x) ? ((from.x == to.x ? from.x : from.x + 1)) : from.x - 1);
 			int p = ((from.y <= to.y) ? ((from.y == to.y ? from.y : from.y + 1)) : from.y - 1);
-			for (k, p; k != to.x && p != to.y; ((from.x <= to.x) ? ((from.x == to.x) ? k : k++) : k--), ((from.y <= to.y) ? ((from.y == to.y) ? p : p++) : p--))
+			for (k, p; k != to.x || p != to.y; ((from.x <= to.x) ? ((from.x == to.x) ? k : k++) : k--), ((from.y <= to.y) ? ((from.y == to.y) ? p : p++) : p--))
 			{
 				if (getChess(Position(p, k)) != nullptr)
 				{
