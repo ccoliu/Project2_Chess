@@ -23,6 +23,7 @@ vector<Position> Pawn::Move(Position newPosition)
 {
 	if (this->color == Color::black)
 	{
+		//if fist step to move Pawn can move two 
 		if (this->step == 0)
 		{
 			vector<Position> possibleMove = { Position(position.y + 1, position.x), Position(position.y + 2, position.x),
@@ -38,6 +39,7 @@ vector<Position> Pawn::Move(Position newPosition)
 	}
 	else
 	{
+		//if fist step to move Pawn can move two 
 		if (this->step == 0)
 		{
 			vector<Position> possibleMove = { Position(position.y - 1, position.x), Position(position.y - 2, position.x),
