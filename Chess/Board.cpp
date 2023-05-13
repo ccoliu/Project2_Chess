@@ -29,7 +29,6 @@ Board::Board()
 
 	board[0][4] = new King(ChessMan::Color::black, Position(0, 4));
 	board[7][4] = new King(ChessMan::Color::white, Position(7, 4));
-
 }
 
 int Board::isCheckmated(ChessMan* board[8][8], Position pos)
@@ -92,6 +91,23 @@ void Board::gotoPreviousBoard()
 		board[lastEatPos.y][lastEatPos.x] = eatenChess;
 	}
 	eatLog.pop_back();
+}
+
+Position Board::getKingPos()
+{
+	Position king_pos;
+	for (int i = 0; i < 8; i++) //find king position
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			ChessMan* chess = getChess(Position(i, j));
+			if (chess != nullptr && typeid(*chess) == typeid(King) && chess->getColor() == starting_color)
+			{
+				king_pos = chess->position;
+			}
+		}
+	}
+	return king_pos;
 }
 
 bool Board::checkTie()
@@ -216,10 +232,6 @@ void Board::DrawBoard()
 				cout << chess->getIcon() << " ";
 			}
 			else cout << ". ";
-			if (chess != nullptr && typeid(*chess) == typeid(King) && chess->getColor() == starting_color)
-			{
-				kingPos = Position(i, j);
-			}
 		}
 		cout << endl;
 	}
@@ -274,6 +286,7 @@ void Board::initMove()
 		cout << "Error: Input Invalid" << endl;
 		return;
 	}
+	kingPos = getKingPos();
 	if (isCheckmated(board, kingPos) != 0)
 	{
 		cout << "Warning: Checkmate alert." << endl;

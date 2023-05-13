@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
-#include <sstream>
+#include <string>
+#include <thread>
 #include "ChessMan.h"
 #include "Knight.h"
 #include "Pawn.h"
@@ -8,6 +9,7 @@
 #include "Bishop.h"
 #include "Queen.h"
 #include "King.h"
+#include "ChessTimer.h"
 using namespace std;
 
 class Board {
@@ -17,6 +19,8 @@ private:
 	bool hasEat = false;
 	string winner = "";
 	Position kingPos;
+	ChessTimer whiteTimer = ChessTimer(10);
+	ChessTimer blackTimer = ChessTimer(10);
 public:
 	ChessMan::Color starting_color;
 	vector<pair<Position,Position>> log;
@@ -32,4 +36,5 @@ public:
 	bool MoveChess(Position from, Position to);
 	void EatChess(Position pos);
 	void Promotion(Position pos);
+	Position getKingPos();
 };

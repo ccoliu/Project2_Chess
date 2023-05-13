@@ -1,9 +1,11 @@
 #include "GameManager.h"
 
+
 GameManager::GameManager()
 {
 	bd = Board();
 }
+
 void GameManager::StartGame()
 {
 	cout << "You can choose who will play first: " << endl;
@@ -22,7 +24,12 @@ void GameManager::StartGame()
 	cin.ignore();
 	while (true)
 	{
-		bd.DrawBoard();
-		bd.initMove();
+		view.printBoard();
+		player.playerMove(bd.starting_color);
 	}
+}
+
+void GameManager::printBoard()
+{
+	view.printBoard();
 }
