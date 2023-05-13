@@ -51,9 +51,6 @@
     <ClInclude Include="ViewManager.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="ChessTimer.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,9 +87,6 @@
       <Filter>來源檔案</Filter>
     </ClCompile>
     <ClCompile Include="ViewManager.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
-    <ClCompile Include="ChessTimer.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
