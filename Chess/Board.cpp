@@ -104,7 +104,7 @@ void Board::gotoPreviousBoard()
 	board[currentPos.y][currentPos.x] = nullptr;
 	chess->position = lastPos;
 	chess->step--;
-	if (typeid(*seq[sz-1]) != typeid(*chess) && typeid(*seq[sz-1]) == typeid(Pawn))
+	if (seq[sz].first != seq[sz].second && seq[sz].first == typeid(Pawn).name())
 	{
 		ChessMan::Color color = chess->getColor();
 		int st = chess->getStep();
@@ -377,6 +377,7 @@ void Board::initMove()
 	if (MoveChess(from, to) == true)
 	{
 		ChessMan* chess = board[from.y][from.x];
+		string lastChessType = typeid(*chess).name();
 		board[to.y][to.x] = chess;
 		chess->position = to;
 		chess->step++;
@@ -389,7 +390,8 @@ void Board::initMove()
 			eatLog.push_back(make_pair(nullptr, Position(-1, -1)));
 		}
 		hasEat = false;
-		seq.push_back(getChess(to));
+		string currentChessType = typeid(*getChess(to)).name();
+		seq.push_back(make_pair(lastChessType, currentChessType));
 		//if checkmate then print the alert and return to origin position
 		if (isCheckmated(board, kingPos) != 0)
 		{
