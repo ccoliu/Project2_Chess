@@ -311,7 +311,6 @@ void Board::DrawBoard()
 		}
 		cout << endl;
 	}
-	cout << "  �ССССССС�" << endl;
 	cout << "   a b c d e f g h" << endl;
 }
 
