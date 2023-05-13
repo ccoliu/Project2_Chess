@@ -5,9 +5,10 @@
 //Description:Chess
 
 #include "Knight.h"
-
+//constructure
 Knight::Knight(Color col, Position position) : ChessMan(col, position)
 {
+	//set two icon of white and black
 	if (col == Color::white)
 	{
 		this->icon = 'n';
@@ -17,7 +18,7 @@ Knight::Knight(Color col, Position position) : ChessMan(col, position)
 		this->icon = 'N';
 	}
 };
-
+//return the normal condition where Knight can move
 vector<Position> Knight::Move(Position newPosition) 
 {
 	vector<Position> accessable = { {position.y - 1, position.x - 2}, {position.y + 1, position.x - 2},

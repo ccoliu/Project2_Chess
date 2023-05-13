@@ -5,9 +5,10 @@
 //Description:Chess
 
 #include "King.h"
-
+//constructure
 King::King(Color col, Position position) : ChessMan(col, position)
 {
+	//set two icon of white and black
 	if (col == Color::white)
 	{
 		this->icon = 'k';
@@ -17,6 +18,7 @@ King::King(Color col, Position position) : ChessMan(col, position)
 		this->icon = 'K';
 	}
 };
+//return the normal condition where King can move
 vector<Position> King::Move(Position newPosition)
 {
 	vector<Position> accessable;

@@ -5,9 +5,10 @@
 //Description:Chess
 
 #include "Pawn.h"
-
+//constructure
 Pawn::Pawn(Color col, Position position) : ChessMan(col, position)
 {
+	//set two icon of white and black
 	if (col == Color::white)
 	{
 		this->icon = 'p';
@@ -17,7 +18,7 @@ Pawn::Pawn(Color col, Position position) : ChessMan(col, position)
 		this->icon = 'P';
 	}
 };
-
+//return the normal condition where Pawn can move
 vector<Position> Pawn::Move(Position newPosition)
 {
 	if (this->color == Color::black)

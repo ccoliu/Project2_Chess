@@ -5,9 +5,10 @@
 //Description:Chess
 
 #include "Queen.h"
-
+//constructure
 Queen::Queen(Color col, Position position) : ChessMan(col, position)
 {
+	//set two icon of white and black
 	if (col == Color::white)
 	{
 		this->icon = 'q';
@@ -17,7 +18,7 @@ Queen::Queen(Color col, Position position) : ChessMan(col, position)
 		this->icon = 'Q';
 	}
 };
-
+//return the normal condition where Queen can move
 vector<Position> Queen::Move(Position newPosition)
 {
 	vector<Position> accessable;

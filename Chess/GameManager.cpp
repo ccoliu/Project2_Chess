@@ -6,12 +6,12 @@
 
 #include "GameManager.h"
 
-
+//constructure
 GameManager::GameManager()
 {
 	bd = Board();
 }
-
+//prepare the information to start game
 void GameManager::StartGame()
 {
 	cout << "You can choose who will play first: " << endl;
@@ -19,6 +19,7 @@ void GameManager::StartGame()
 	cout << "2. Black" << endl;
 	int choice;
 	cin >> choice;
+	//chose color
 	if (choice == 1)
 	{
 		bd.starting_color = ChessMan::Color::white;
@@ -28,13 +29,14 @@ void GameManager::StartGame()
 		bd.starting_color = ChessMan::Color::black;
 	}
 	cin.ignore();
+	// play game to gameover
 	while (true)
 	{
 		view.printBoard();
 		player.playerMove(bd.starting_color);
 	}
 }
-
+//print the Board
 void GameManager::printBoard()
 {
 	view.printBoard();

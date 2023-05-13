@@ -5,9 +5,10 @@
 //Description:Chess
 
 #include "Rook.h"
-
+//constructure
 Rook::Rook(Color col, Position position) : ChessMan(col, position)
 {
+	//set two icon of white and black
 	if (col == Color::white)
 	{
 		this->icon = 'r';
@@ -17,6 +18,7 @@ Rook::Rook(Color col, Position position) : ChessMan(col, position)
 		this->icon = 'R';
 	}
 };
+//return the normal condition where Rook can move
 vector<Position> Rook::Move(Position newPosition)
 {
 	vector<Position> accessable;

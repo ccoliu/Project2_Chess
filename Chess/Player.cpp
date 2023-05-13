@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "GameManager.h"
-
+//constructure
 Player::Player(ChessMan::Color color, GameManager* game)
 {
 	player_color = color;
