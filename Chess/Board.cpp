@@ -12,8 +12,6 @@ Board::Board()
 	{
 		board[1][i] = new Pawn(ChessMan::Color::black, Position(1, i));
 		board[6][i] = new Pawn(ChessMan::Color::white, Position(6, i));
-		board[1][i] = new Pawn(ChessMan::Color::black, Position(1, i));
-		board[6][i] = new Pawn(ChessMan::Color::white, Position(6, i));
 	}
 	//initialize Knight position
 	board[0][1] = new Knight(ChessMan::Color::black, Position(0, 1));
