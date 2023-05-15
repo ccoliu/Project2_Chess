@@ -659,8 +659,9 @@ bool Board::MoveChess(Position from, Position to)
 				ChessMan* rook = nullptr;
 				if (to.x < from.x)
 				{
+					int i = 3;
 					//check whether have Rook to castling
-					for (int i = from.x - 1; i >= 0; i--)
+					for (i; i >= 0; i--)
 					{
 						if (getChess(Position(to.y, i)) == nullptr) continue;
 						if (typeid(*getChess(Position(to.y, i))) == typeid(Rook))
@@ -707,15 +708,16 @@ bool Board::MoveChess(Position from, Position to)
 				else
 				{
 					//check whether have Rook to castling
-					for (int i = from.x + 1; i < 8; i++)
+					int j = 5;
+					for (j; j < 8; j++)
 					{
-						if (getChess(Position(to.y, i)) == nullptr) continue;
-						if (typeid(*getChess(Position(to.y, i))) == typeid(Rook))
+						if (getChess(Position(to.y, j)) == nullptr) continue;
+						if (typeid(*getChess(Position(to.y, j))) == typeid(Rook))
 						{
 							hasRook = true;
-							rook = getChess(Position(to.y, i));
+							rook = getChess(Position(to.y, j));
 						}
-						if (getChess(Position(to.y, i)) != nullptr)
+						else if (getChess(Position(to.y, j)) != nullptr)
 						{
 							cout << "Invalid move: Move not available!" << endl;
 							return false;
