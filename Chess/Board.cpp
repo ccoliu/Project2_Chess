@@ -207,19 +207,19 @@ bool Board::checkTie()
 			Position pos = chess->position;
 			if (chess->getColor() == ChessMan::Color::white)
 			{
-				if (getChess(Position(pos.y + 1, pos.x)) == nullptr) return false;
-				if (getChess(Position(pos.y + 1, pos.x + 1)) != nullptr && getChess(Position(pos.y + 1, pos.x + 1))->getColor() != chess->getColor()) return false;
-				if (getChess(Position(pos.y + 1, pos.x - 1)) != nullptr && getChess(Position(pos.y + 1, pos.x - 1))->getColor() != chess->getColor()) return false;
-				if (getChess(Position(pos.y, pos.x + 1)) != nullptr && typeid(*getChess(Position(pos.y, pos.x + 1))) == typeid(Pawn) && getChess(Position(pos.y, pos.x + 1))->getColor() != chess->getColor() && getChess(Position(pos.y, pos.x + 1))->getStep() == 1) return false;
-				if (getChess(Position(pos.y, pos.x - 1)) != nullptr && typeid(*getChess(Position(pos.y, pos.x - 1))) == typeid(Pawn) && getChess(Position(pos.y, pos.x - 1))->getColor() != chess->getColor() && getChess(Position(pos.y, pos.x - 1))->getStep() == 1) return false;
+				if (pos.y + 1 < 8 && getChess(Position(pos.y + 1, pos.x)) == nullptr) return false;
+				if (pos.y + 1 < 8 && pos.x + 1 < 8 && getChess(Position(pos.y + 1, pos.x + 1)) != nullptr && getChess(Position(pos.y + 1, pos.x + 1))->getColor() != chess->getColor()) return false;
+				if (pos.y + 1 < 8 && pos.x - 1 >= 0 && getChess(Position(pos.y + 1, pos.x - 1)) != nullptr && getChess(Position(pos.y + 1, pos.x - 1))->getColor() != chess->getColor()) return false;
+				if (pos.x + 1 < 8 && getChess(Position(pos.y, pos.x + 1)) != nullptr && typeid(*getChess(Position(pos.y, pos.x + 1))) == typeid(Pawn) && getChess(Position(pos.y, pos.x + 1))->getColor() != chess->getColor() && getChess(Position(pos.y, pos.x + 1))->getStep() == 1) return false;
+				if (pos.x - 1 >= 0 && getChess(Position(pos.y, pos.x - 1)) != nullptr && typeid(*getChess(Position(pos.y, pos.x - 1))) == typeid(Pawn) && getChess(Position(pos.y, pos.x - 1))->getColor() != chess->getColor() && getChess(Position(pos.y, pos.x - 1))->getStep() == 1) return false;
 			}
 			else
 			{
-				if (getChess(Position(pos.y - 1, pos.x)) == nullptr) return false;
-				if (getChess(Position(pos.y - 1, pos.x + 1)) != nullptr && getChess(Position(pos.y - 1, pos.x + 1))->getColor() != chess->getColor()) return false;
-				if (getChess(Position(pos.y - 1, pos.x - 1)) != nullptr && getChess(Position(pos.y - 1, pos.x - 1))->getColor() != chess->getColor()) return false;
-				if (getChess(Position(pos.y, pos.x + 1)) != nullptr && typeid(*getChess(Position(pos.y, pos.x + 1))) == typeid(Pawn) && getChess(Position(pos.y, pos.x + 1))->getColor() != chess->getColor() && getChess(Position(pos.y, pos.x + 1))->getStep() == 1) return false;
-				if (getChess(Position(pos.y, pos.x - 1)) != nullptr && typeid(*getChess(Position(pos.y, pos.x - 1))) == typeid(Pawn) && getChess(Position(pos.y, pos.x - 1))->getColor() != chess->getColor() && getChess(Position(pos.y, pos.x - 1))->getStep() == 1) return false;
+				if (pos.y - 1 >= 0 && getChess(Position(pos.y - 1, pos.x)) == nullptr) return false;
+				if (pos.y - 1 >= 0 && pos.x + 1 < 8 && getChess(Position(pos.y - 1, pos.x + 1)) != nullptr && getChess(Position(pos.y - 1, pos.x + 1))->getColor() != chess->getColor()) return false;
+				if (pos.y - 1 >= 0 && pos.x - 1 >= 0 && getChess(Position(pos.y - 1, pos.x - 1)) != nullptr && getChess(Position(pos.y - 1, pos.x - 1))->getColor() != chess->getColor()) return false;
+				if (pos.x + 1 < 8 && getChess(Position(pos.y, pos.x + 1)) != nullptr && typeid(*getChess(Position(pos.y, pos.x + 1))) == typeid(Pawn) && getChess(Position(pos.y, pos.x + 1))->getColor() != chess->getColor() && getChess(Position(pos.y, pos.x + 1))->getStep() == 1) return false;
+				if (pos.x - 1 >= 0 && getChess(Position(pos.y, pos.x - 1)) != nullptr && typeid(*getChess(Position(pos.y, pos.x - 1))) == typeid(Pawn) && getChess(Position(pos.y, pos.x - 1))->getColor() != chess->getColor() && getChess(Position(pos.y, pos.x - 1))->getStep() == 1) return false;
 			}
 		}
 		//check Rook
