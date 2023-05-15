@@ -1,5 +1,5 @@
 //File : Bishop.cpp
-//Name : ¼B¥[¦¨ ¤ı¬Rµ¾ §fª@®p ³¯©|«h
+//Name : åŠ‰åŠ æˆ ç‹æ˜±ç¿” å‘‚æ˜‡å³° é™³å°šæ¾¤
 //First Update:2023/5/3
 //Last Update:2023/5/12
 //Description:Chess
