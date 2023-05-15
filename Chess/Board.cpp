@@ -322,7 +322,7 @@ void Board::initMove()
 	//open the menu
 	if (s == "menu")
 	{
-		cout << "Please select your choice:" << endl;
+		cout << "Please select your choice: (Enter number)" << endl;
 		cout << "(1) Resign" << endl;
 		cout << "(2) Redo" << endl;
 		cout << "(3) Exit" << endl;
@@ -348,6 +348,7 @@ void Board::initMove()
 			if (starting_color == ChessMan::Color::white)
 			{
 				cout << "White resigned, Black wins!" << endl;
+				system("pause");
 				exit(0);
 			}
 			else
@@ -810,11 +811,11 @@ void Board::EatChess(Position pos)
 //pawn promotion
 void Board::Promotion(Position pos)
 {
-	cout << "Enter the type of chess you want to promote to: " << endl;
-	cout << "1. Queen" << endl;
-	cout << "2. Rook" << endl;
-	cout << "3. Bishop" << endl;
-	cout << "4. Knight" << endl;
+	cout << "Enter the type of chess you want to promote to: (Enter number)" << endl;
+	cout << "(1) Queen" << endl;
+	cout << "(2) Rook" << endl;
+	cout << "(3) Bishop" << endl;
+	cout << "(4) Knight" << endl;
 	int choice;
 retry:
 	cin >> choice;
