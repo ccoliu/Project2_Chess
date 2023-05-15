@@ -1,8 +1,9 @@
 //File : Board.cpp
 //Name : 劉加成 王昱翔 呂昇峰 陳尚澤
 //First Update:2023/5/3
-//Last Update:2023/5/12
+//Last Update:2023/5/15
 //Description:Chess
+
 #include "Board.h"
 
 Board::Board()
