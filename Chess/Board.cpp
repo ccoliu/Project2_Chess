@@ -709,6 +709,7 @@ bool Board::MoveChess(Position from, Position to)
 					//check whether have Rook to castling
 					for (int i = from.x + 1; i < 8; i++)
 					{
+						if (getChess(Position(to.y, i)) == nullptr) continue;
 						if (typeid(*getChess(Position(to.y, i))) == typeid(Rook))
 						{
 							hasRook = true;
