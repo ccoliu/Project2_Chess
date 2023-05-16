@@ -32,12 +32,13 @@ public:
 	ChessMan* board[8][8] = { nullptr };
 	Board();
 	void gotoPreviousBoard();
+	bool MoveChessTest(Position from, Position to, Position king);
 	int isCheckmated(ChessMan* board[8][8], Position pos);
 	bool checkTie();
 	void DrawBoard();
 	void initMove();
 	ChessMan* getChess(Position position);
-	bool MoveChess(Position from, Position to);
+	bool MoveChess(Position from, Position to,int idx);
 	void EatChess(Position pos);
 	void Promotion(Position pos);
 	Position getKingPos();
