@@ -20,4 +20,4 @@ After Pawn go to the last position it will let you chose which chess you want to
 During the game,you can input menu to open menu,there are three selection,input 1 to resign ,input 2 to redo,and input 3 to exit the game.
 
 Maintainer
-劉家成 陳尚則 呂昇峰 王昱翔
+劉家成 陳尚澤 呂昇峰 王昱翔
