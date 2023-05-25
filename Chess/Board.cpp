@@ -481,7 +481,14 @@ bool Board::MoveChess(Position from, Position to,int idx)
 			//can move to ahead
 			else if (getChess(to) == nullptr)
 			{
-				return true;
+				if (chess->getColor() == ChessMan::Color::white)
+				{
+					if (getChess(Position(from.y - 1, from.x)) == nullptr) return true;
+				}
+				else
+				{
+					if (getChess(Position(from.y + 1, from.x)) == nullptr) return true;
+				}
 			}
 			else
 			{

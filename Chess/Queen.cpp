@@ -22,7 +22,7 @@ Queen::Queen(Color col, Position position) : ChessMan(col, position)
 vector<Position> Queen::Move(Position newPosition)
 {
 	vector<Position> accessable;
-	for (int i = 0; i < 7; i++)
+	for (int i = 1; i < 8; i++)
 	{
 		accessable.push_back(Position(position.y + i, position.x));
 		accessable.push_back(Position(position.y - i, position.x));
